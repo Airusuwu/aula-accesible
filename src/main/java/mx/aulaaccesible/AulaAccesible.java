@@ -3,12 +3,17 @@ package mx.aulaaccesible;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+
+import java.io.IOException;
 
 public final class AulaAccesible extends Application {
     @Override
     public void start(Stage stage) throws Exception {
+        cargarFuente("AtkinsonHyperlegible-Regular.ttf");
+        cargarFuente("AtkinsonHyperlegible-Bold.ttf");
         var fxml = new FXMLLoader(AulaAccesible.class.getResource("ventana.fxml"));
         var pantalla = Screen.getPrimary().getVisualBounds();
         var scene = new Scene(fxml.load(),
@@ -20,5 +25,13 @@ public final class AulaAccesible extends Application {
         stage.setMinHeight(445);
         stage.setScene(scene);
         stage.show();
+    }
+
+    private static void cargarFuente(String archivo) throws IOException {
+        try (var fuente = AulaAccesible.class.getResourceAsStream("fuentes/" + archivo)) {
+            if (fuente != null) {
+                Font.loadFont(fuente, 16);
+            }
+        }
     }
 }

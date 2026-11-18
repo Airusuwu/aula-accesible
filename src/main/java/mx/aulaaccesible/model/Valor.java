@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public enum Valor {
     @JsonProperty("si") SI("Sí"),
     @JsonProperty("no") NO("No"),
-    @JsonProperty("desconocido") DESCONOCIDO("Desconocido"),
+    @JsonProperty("desconocido") DESCONOCIDO("No lo he verificado"),
     @JsonProperty("no_aplica") NO_APLICA("No aplica");
 
     private final String etiqueta;

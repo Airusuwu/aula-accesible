@@ -45,7 +45,7 @@ final class Controles {
     }
 
     static HBox fila(String estilo, Node... nodos) {
-        HBox fila = new HBox(10, nodos);
+        HBox fila = new HBox(12, nodos);
         fila.setAlignment(Pos.CENTER_LEFT);
         fila.getStyleClass().add(estilo);
         return fila;
@@ -70,7 +70,7 @@ final class Controles {
     static VBox campoConEtiqueta(String nombre, TextField campo) {
         Label etiqueta = texto(nombre, "etiqueta-campo");
         etiqueta.setLabelFor(campo);
-        return caja(5, "campo-con-etiqueta", etiqueta, campo);
+        return caja(4, "campo-con-etiqueta", etiqueta, campo);
     }
 
     static void enfocar(Node nodo) {

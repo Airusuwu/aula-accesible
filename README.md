@@ -20,12 +20,16 @@ El Maven Wrapper descarga Maven y resuelve JavaFX y las demás dependencias en l
 
 ## Probar el ejemplo
 
-1. Pulsa **Cargar ejemplo** y luego **Generar diagnóstico**. Deben aparecer **11 favorables, 6 barreras, 1 pendiente y 6 que no aplican**.
-2. Abre **Interacción restringida**. La regla 17 se activa porque tanto la operación con teclado como la alternativa al arrastre tienen respuesta «No».
-3. Pulsa **Editar respuestas**, entra a **Interacción y control** y selecciona **Alternativa al arrastre** en el selector de criterios. Cámbiala a «Sí» y genera el diagnóstico otra vez. Verás **12 favorables y 5 barreras**. La interacción restringida desaparece y el estado sigue siendo **Requiere atención prioritaria**.
-4. Inicia una evaluación nueva y responde solo el primer criterio. En **Pendientes** podrás ver las 23 preguntas omitidas.
+1. Pulsa **Probar con un ejemplo** y luego **Ver diagnóstico parcial**. El ejemplo completo muestra **11 favorables, 6 barreras, 1 pendiente y 6 criterios que no aplican**.
+2. En **Problemas combinados**, abre **Interacción restringida**. La regla 17 se activa porque tanto la operación con teclado como la alternativa al arrastre tienen respuesta «No».
+3. Pulsa **Editar respuestas**, entra a **Interacción y control** y elige **Alternativa al arrastre** en **Ir a un criterio**. Cámbiala a «Sí» y pulsa **Ver diagnóstico**. Verás **12 favorables y 5 barreras**. La interacción restringida desaparece y el estado sigue siendo **Requiere atención prioritaria**.
+4. En **Pendientes**, usa **Ir al criterio** para retomar la pregunta que falta verificar. También puedes iniciar una evaluación nueva, responder solo la primera pregunta y revisar los 23 criterios sin responder.
 
 El caso está incluido en la base de conocimientos y se carga desde Prolog.
+
+En el cuestionario, abre **Cómo evaluar este criterio** si necesitas pasos para comprobarlo y saber cuándo marcar «Sí». La ayuda comienza cerrada en cada pregunta.
+
+Para conservar el diagnóstico, pulsa **Exportar informe** y elige dónde guardar el HTML. Puedes abrirlo sin conexión en un navegador e imprimirlo como cualquier página.
 
 ## Archivos y pruebas
 
@@ -39,4 +43,6 @@ Para ejecutar las pruebas de Prolog y las de integración con Java, conserva las
 powershell -NoProfile -File .\scripts\probar.ps1
 ```
 
-Los siguientes pasos son exportar el diagnóstico, guardar y reabrir evaluaciones y comparar los resultados antes y después de corregir una interfaz.
+Los siguientes pasos son guardar y reabrir evaluaciones y comparar los resultados antes y después de corregir una interfaz.
+
+La interfaz incluye Atkinson Hyperlegible del Braille Institute. [Licencia SIL OFL](src/main/resources/mx/aulaaccesible/fuentes/OFL.txt).

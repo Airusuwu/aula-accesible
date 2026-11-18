@@ -1,149 +1,121 @@
-/* Colores compartidos para las tres pantallas. */
+/* Colores y controles compartidos por las tres pantallas. */
 .root {
-    -aula-fondo: #f3f5fa;
+    -aula-fondo: #f7f7f3;
     -aula-superficie: #ffffff;
-    -aula-tinta: #17223b;
-    -aula-secundario: #46546d;
-    -aula-linea: #d8deeb;
-    -aula-control: #7986a3;
-    -aula-accion: #2444c7;
-    -aula-accion-hover: #19339c;
-    -aula-accion-suave: #e8edff;
-    -aula-foco: #2444c7;
-    -aula-noche: #101c40;
-    -aula-noche-clara: #263f93;
-    -aula-texto-noche: #e0e8ff;
-    -aula-favorable: #136050;
-    -aula-favorable-fondo: #e8f6f1;
-    -aula-barrera: #992c3f;
-    -aula-barrera-fondo: #fff0f2;
-    -aula-pendiente: #745018;
-    -aula-pendiente-fondo: #fff5df;
+    -aula-tinta: #102d27;
+    -aula-secundario: #435a54;
+    -aula-linea: #c4d0ca;
+    -aula-control: #6c827a;
+    -aula-accion: #006447;
+    -aula-accion-hover: #004a35;
+    -aula-accion-suave: #d6e9df;
+    -aula-bosque: #0d352b;
+    -aula-activo: #5ce5ac;
+    -aula-aviso: #8b470e;
+    -aula-error: #992c3f;
+    -aula-error-fondo: #fff0f2;
 
-    -fx-font-family: "Segoe UI";
+    -fx-font-family: "Atkinson Hyperlegible";
     -fx-font-size: 16px;
     -fx-base: -aula-superficie;
     -fx-background: -aula-fondo;
     -fx-background-color: -aula-fondo;
     -fx-accent: -aula-accion;
-    -fx-focus-color: -aula-foco;
-    -fx-faint-focus-color: #2444c733;
+    -fx-focus-color: -aula-accion;
+    -fx-faint-focus-color: #00644733;
 }
 
 .label, .button, .radio-button, .check-box, .choice-box { -fx-text-fill: -aula-tinta; }
-.texto { -fx-text-fill: -aula-tinta; }
-.ayuda, .contexto, .ubicacion {
-    -fx-font-size: 14px;
-    -fx-text-fill: -aula-secundario;
-}
-.titulo { -fx-font-size: 29px; -fx-font-weight: bold; }
-.titulo-seccion { -fx-font-size: 23px; -fx-font-weight: bold; }
-.subtitulo { -fx-font-size: 16px; -fx-font-weight: bold; }
-.sobrelinea, .etiqueta-campo { -fx-font-size: 14px; -fx-font-weight: bold; }
-.sobrelinea { -fx-text-fill: -aula-secundario; }
+.ayuda, .contexto, .ubicacion, .contexto-criterio { -fx-font-size: 14px; -fx-text-fill: -aula-secundario; }
+.etiqueta-campo { -fx-font-size: 14px; }
+.titulo, .titulo-inicio { -fx-font-size: 32px; -fx-font-weight: bold; }
+.titulo-pregunta { -fx-font-size: 28px; -fx-font-weight: bold; }
+.titulo-grupo, .subtitulo { -fx-font-size: 18px; -fx-font-weight: bold; }
+.sobrelinea { -fx-font-size: 14px; -fx-text-fill: -aula-secundario; }
 
 .barra-superior {
-    -fx-background-color: -aula-superficie;
-    -fx-border-color: transparent transparent -aula-linea transparent;
-    -fx-padding: 12 24;
+    -fx-background-color: -aula-bosque;
+    -fx-padding: 8 24;
 }
-.marca {
-    -fx-background-color: -aula-accion;
-    -fx-text-fill: white;
-    -fx-background-radius: 8;
-    -fx-padding: 4 8;
-    -fx-font-weight: bold;
-    -fx-font-size: 18px;
-}
-.nombre-app { -fx-font-size: 19px; -fx-font-weight: bold; }
-.indicador-pasos { -fx-background-color: -aula-fondo; -fx-background-radius: 9; -fx-padding: 3; }
-.paso { -fx-text-fill: -aula-secundario; -fx-font-size: 14px; -fx-padding: 5 10; -fx-background-radius: 6; }
-.paso-activo { -fx-background-color: -aula-accion-suave; -fx-text-fill: -aula-accion; -fx-font-weight: bold; }
+.indicador-paso { -fx-padding: 6 4; -fx-border-width: 0 0 3 0; -fx-border-color: transparent; }
+.indicador-paso.paso-activo { -fx-border-color: transparent transparent -aula-activo transparent; }
+.paso { -fx-text-fill: white; -fx-font-size: 16px; }
+.paso-activo .paso { -fx-font-weight: bold; }
+.trazo-paso, .placa-paso { -fx-stroke: white; -fx-stroke-width: 1.6; -fx-fill: transparent; }
+.placa-paso { -fx-fill: -aula-bosque; }
+.barra-paso { -fx-fill: white; }
 
 .scroll-pane { -fx-background-color: transparent; -fx-padding: 0; }
 .scroll-pane > .viewport { -fx-background-color: transparent; }
 .scroll-bar:vertical > .thumb { -fx-background-color: -aula-control; -fx-background-radius: 8; }
 
-.marco-inicio { -fx-alignment: TOP_CENTER; -fx-padding: 28 24; }
-.pagina-inicio { -fx-alignment: TOP_LEFT; -fx-spacing: 16; -fx-fill-height: true; }
-.hero {
-    -fx-pref-width: 490px;
-    -fx-padding: 33 29;
-    -fx-alignment: CENTER_LEFT;
-    -fx-background-color: linear-gradient(to bottom right, -aula-noche, -aula-noche-clara);
-    -fx-background-radius: 18;
+.marco-inicio { -fx-alignment: TOP_CENTER; -fx-padding: 36 24; }
+.etiqueta-inicio { -fx-font-size: 18px; -fx-text-fill: -aula-aviso; -fx-font-weight: bold; }
+.titulo-inicio { -fx-font-size: 40px; }
+.introduccion { -fx-font-size: 18px; -fx-text-fill: -aula-secundario; }
+.formulario-inicio {
+    -fx-padding: 20 0 0 0;
+    -fx-border-color: -aula-linea transparent transparent transparent;
 }
-.titulo-inicio { -fx-text-fill: white; -fx-font-size: 36px; -fx-font-weight: bold; }
-.introduccion, .dato-texto { -fx-text-fill: -aula-texto-noche; }
-.introduccion { -fx-font-size: 17px; }
-.indicadores-inicio { -fx-spacing: 14; -fx-padding: 7 0 0 0; }
-.dato-inicio { -fx-padding: 0 17 0 0; }
-.cifra-inicio { -fx-text-fill: white; -fx-font-size: 28px; -fx-font-weight: bold; }
-.dato-texto { -fx-font-size: 14px; }
-.panel-inicio {
-    -fx-pref-width: 455px;
-    -fx-background-color: -aula-superficie;
-    -fx-border-color: -aula-linea;
-    -fx-background-radius: 18;
-    -fx-border-radius: 18;
-}
-.formulario-inicio { -fx-padding: 22 24 17 24; }
-.tarjeta-ejemplo { -fx-padding: 14 24 18 24; -fx-border-color: -aula-linea transparent transparent transparent; }
-.sesion-inicio { -fx-padding: 4 24 12 24; }
-.estado-inicio { -fx-padding: 0 5; }
-.estado-conectado { -fx-text-fill: -aula-favorable; -fx-font-size: 14px; -fx-font-weight: bold; }
+.formulario-inicio .etiqueta-campo { -fx-font-size: 16px; -fx-font-weight: bold; }
+.formulario-inicio .text-field { -fx-min-height: 44px; }
+.acciones-inicio { -fx-padding: 8 0 0 0; }
+.acciones-inicio .primario { -fx-min-height: 44px; -fx-padding: 8 16; }
+.aviso-inicio { -fx-background-color: -aula-error-fondo; -fx-background-radius: 8; -fx-padding: 16; }
 
-.panel-menu, .panel-menu > .viewport { -fx-background-color: -aula-superficie; }
-.panel-menu { -fx-border-color: transparent -aula-linea transparent transparent; }
-.menu { -fx-padding: 16 12 20 14; }
-.menu .sobrelinea { -fx-padding: 9 0 0 0; }
-.texto-progreso { -fx-text-fill: -aula-secundario; -fx-font-size: 14px; }
-.progress-bar { -fx-pref-height: 9px; }
+.cabecera-cuestionario { -fx-padding: 16 24 8 24; }
+.areas-cuestionario { -fx-spacing: 0; -fx-padding: 1; -fx-border-color: -aula-control; -fx-border-radius: 8; }
+.texto-progreso { -fx-text-fill: -aula-tinta; -fx-font-size: 15px; }
+.progreso-cuestionario .subtitulo { -fx-font-size: 16px; }
+.progress-bar { -fx-min-height: 12px; -fx-pref-height: 12px; -fx-max-height: 12px; }
 .progress-bar > .bar { -fx-background-color: -aula-accion; -fx-background-insets: 0; -fx-background-radius: 8; }
-.progress-bar > .track { -fx-background-color: #dce3f4; -fx-background-radius: 8; }
+.progress-bar > .track { -fx-background-color: #bcdbc9; -fx-background-insets: 0; -fx-background-radius: 8; }
+.segmentos-progreso { -fx-spacing: 0; }
+.segmento-progreso { -fx-border-color: transparent -aula-bosque transparent transparent; }
+.segmento-progreso.ultimo-segmento { -fx-border-color: transparent; }
 .seccion.button, .seccion-activa.button {
-    -fx-alignment: CENTER_LEFT;
-    -fx-font-size: 14px;
-    -fx-padding: 7 9;
+    -fx-alignment: CENTER;
+    -fx-text-alignment: CENTER;
+    -fx-font-size: 15px;
+    -fx-min-height: 48px;
+    -fx-padding: 4 8;
+    -fx-background-radius: 0;
+    -fx-border-radius: 0;
 }
-.seccion.button { -fx-background-color: transparent; -fx-border-color: transparent; }
+.seccion.button { -fx-background-color: transparent; -fx-border-color: transparent -aula-linea transparent transparent; }
+.seccion.ultima-area.button { -fx-border-color: transparent; }
 .seccion-activa.button {
     -fx-background-color: -aula-accion-suave;
     -fx-text-fill: -aula-accion;
-    -fx-border-color: transparent transparent transparent -aula-accion;
-    -fx-border-width: 1 1 1 3;
+    -fx-font-weight: bold;
+    -fx-border-color: transparent transparent -aula-accion transparent;
+    -fx-border-width: 0 0 3 0;
 }
+.contenido-quiz { -fx-padding: 12 24 24 24; }
+.vista-cuestionario:compacto .cabecera-cuestionario { -fx-padding: 8 24 4 24; -fx-spacing: 8; }
+.vista-cuestionario:compacto .progreso-cuestionario { -fx-spacing: 4; }
+.vista-cuestionario:compacto .contenido-quiz { -fx-padding: 8 24 16 24; }
+.vista-cuestionario:compacto .tarjeta-pregunta { -fx-spacing: 8; }
+.vista-cuestionario:compacto .titulo-pregunta { -fx-font-size: 24px; }
+.contexto-criterio { -fx-font-size: 16px; }
+.selector-criterio { -fx-max-width: 368px; }
+.respuestas { -fx-padding: 4 0; }
+.confirmacion-motivo { -fx-background-color: -aula-fondo; -fx-background-radius: 8; -fx-padding: 8 12; }
+.error-campo { -fx-text-fill: -aula-error; -fx-font-size: 16px; }
 
-.encabezado-quiz { -fx-padding: 14 24 9 24; }
-.selector-criterio { -fx-max-width: 370px; -fx-padding: 2 0 0 0; }
-.contenido-quiz { -fx-padding: 5 24 22 24; }
-.tarjeta-pregunta {
-    -fx-padding: 16 20;
-    -fx-background-color: -aula-superficie;
-    -fx-background-radius: 12;
-    -fx-border-color: -aula-linea;
-    -fx-border-radius: 12;
-}
-.titulo-pregunta { -fx-font-size: 25px; -fx-font-weight: bold; }
-.cabecera-criterio, .fila-titulo { -fx-alignment: CENTER_LEFT; }
-.respuestas { -fx-padding: 3 0; }
-.confirmacion-motivo {
-    -fx-background-color: -aula-fondo;
-    -fx-background-radius: 8;
-    -fx-padding: 8 11;
-}
-.error-campo { -fx-text-fill: -aula-barrera; -fx-font-weight: bold; -fx-font-size: 14px; }
 .radio-button {
     -fx-background-color: -aula-superficie;
     -fx-background-radius: 8;
     -fx-border-color: -aula-control;
     -fx-border-radius: 8;
-    -fx-border-width: 1;
-    -fx-min-height: 37px;
-    -fx-padding: 5 10;
+    -fx-min-height: 44px;
+    -fx-pref-height: 44px;
+    -fx-min-width: 192px;
+    -fx-padding: 4 8;
 }
-.radio-button:selected { -fx-background-color: -aula-accion-suave; -fx-border-color: -aula-accion; }
 .radio-button:hover { -fx-background-color: -aula-fondo; }
+.radio-button:selected { -fx-background-color: -aula-accion-suave; -fx-border-color: -aula-accion; }
+.radio-button:disabled { -fx-opacity: 0.60; }
 .radio-button > .radio {
     -fx-background-color: -aula-superficie;
     -fx-background-insets: 0;
@@ -152,150 +124,143 @@
     -fx-border-radius: 100;
 }
 .radio-button:selected > .radio > .dot { -fx-background-color: -aula-accion; -fx-background-insets: 0; }
-.check-box { -fx-padding: 6 3; -fx-min-height: 32px; }
+.check-box { -fx-padding: 4; -fx-min-height: 32px; }
 .check-box > .box {
     -fx-background-color: -aula-superficie;
     -fx-background-insets: 0;
     -fx-border-color: -aula-control;
-    -fx-border-radius: 3;
+    -fx-border-radius: 4;
 }
 .check-box:selected > .box { -fx-background-color: -aula-accion; -fx-border-color: -aula-accion; }
 .check-box:selected > .box > .mark { -fx-background-color: white; }
-.prioridad-alta, .prioridad-media, .prioridad-baja, .estado-pendiente {
-    -fx-background-radius: 5;
-    -fx-padding: 3 8;
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-}
-.prioridad-alta { -fx-background-color: -aula-barrera-fondo; -fx-text-fill: -aula-barrera; }
-.prioridad-media, .estado-pendiente { -fx-background-color: -aula-pendiente-fondo; -fx-text-fill: -aula-pendiente; }
-.prioridad-baja { -fx-background-color: -aula-accion-suave; -fx-text-fill: -aula-accion; }
 
 .pie-acciones {
     -fx-background-color: -aula-superficie;
     -fx-border-color: -aula-linea transparent transparent transparent;
-    -fx-padding: 10 24;
+    -fx-padding: 8 24;
 }
 .button {
     -fx-cursor: hand;
-    -fx-font-weight: bold;
     -fx-background-insets: 0;
     -fx-border-width: 1;
     -fx-background-radius: 8;
     -fx-border-radius: 8;
-    -fx-min-height: 38px;
-    -fx-padding: 6 13;
+    -fx-min-height: 40px;
+    -fx-padding: 8 12;
 }
-.primario.button { -fx-background-color: -aula-accion; -fx-text-fill: white; -fx-border-color: -aula-accion; }
+.primario.button { -fx-background-color: -aula-accion; -fx-text-fill: white; -fx-border-color: -aula-accion; -fx-font-weight: bold; }
 .primario.button:hover, .primario.button:armed { -fx-background-color: -aula-accion-hover; }
 .secundario.button { -fx-background-color: -aula-superficie; -fx-border-color: -aula-control; }
 .secundario.button:hover, .seccion.button:hover { -fx-background-color: -aula-accion-suave; }
-.enlace.button { -fx-background-color: transparent; -fx-text-fill: -aula-accion; -fx-padding: 3 4; -fx-border-color: transparent; }
+.enlace.button { -fx-background-color: transparent; -fx-text-fill: -aula-accion; -fx-padding: 4 8; -fx-border-color: transparent; }
 .enlace.button:hover { -fx-underline: true; }
 .button:disabled { -fx-opacity: 0.55; }
 
 .text-field, .choice-box {
     -fx-background-color: -aula-superficie;
     -fx-background-insets: 0;
-    -fx-background-radius: 7;
+    -fx-background-radius: 8;
     -fx-border-color: -aula-control;
-    -fx-border-radius: 7;
+    -fx-border-radius: 8;
     -fx-text-fill: -aula-tinta;
-    -fx-min-height: 37px;
+    -fx-min-height: 40px;
 }
-.text-field { -fx-prompt-text-fill: -aula-secundario; -fx-padding: 6 10; }
-.choice-box .label { -fx-font-size: 14px; }
+.text-field { -fx-prompt-text-fill: -aula-secundario; -fx-padding: 4 12; }
 .choice-box > .open-button > .arrow { -fx-background-color: -aula-tinta; }
 
 .button:focused, .radio-button:focused, .check-box:focused, .text-field:focused, .choice-box:focused {
-    -fx-border-color: -aula-foco;
+    -fx-border-color: -aula-accion;
     -fx-border-width: 2;
     -fx-border-radius: 8;
-    -fx-border-insets: -3;
+    -fx-border-insets: -4;
 }
-.titulo:focused, .titulo-pregunta:focused, .titulo-inicio:focused {
-    -fx-border-color: -aula-foco;
-    -fx-border-width: 0 0 0 3;
-    -fx-border-insets: 0 0 0 -9;
-}
-.titulo-inicio:focused {
-    -fx-border-color: -aula-texto-noche;
-}
-
-.encabezado-resultados { -fx-padding: 12 24 7 24; }
-.resumen {
-    -fx-padding: 8 14;
+.titulo:focused, .titulo-pregunta:focused, .titulo-inicio:focused, .estado-exportacion:focused {
+    -fx-border-color: -aula-accion;
     -fx-border-width: 0 0 0 4;
-    -fx-background-radius: 9;
-    -fx-border-radius: 9;
+    -fx-border-insets: 0 0 0 -8;
 }
-.resumen-barrera { -fx-background-color: -aula-barrera-fondo; -fx-border-color: -aula-barrera; }
-.resumen-pendiente { -fx-background-color: -aula-pendiente-fondo; -fx-border-color: -aula-pendiente; }
-.resumen-favorable { -fx-background-color: -aula-favorable-fondo; -fx-border-color: -aula-favorable; }
-.resumen-neutro { -fx-background-color: -aula-accion-suave; -fx-border-color: -aula-accion; }
-.metricas { -fx-spacing: 8; }
-.metrica {
-    -fx-background-color: -aula-superficie;
-    -fx-padding: 5 11;
-    -fx-border-color: -aula-linea;
-    -fx-background-radius: 8;
-    -fx-border-radius: 8;
-}
-.numero { -fx-font-size: 24px; -fx-font-weight: bold; }
-.favorable .numero { -fx-text-fill: -aula-favorable; }
-.barrera .numero { -fx-text-fill: -aula-barrera; }
-.pendiente .numero { -fx-text-fill: -aula-pendiente; }
 
-.pestanas-diagnostico { -fx-tab-min-height: 34px; }
-.pestanas-diagnostico > .tab-header-area { -fx-padding: 3 24 0 24; }
+.encabezado-resultados {
+    -fx-padding: 16 24 12 24;
+    -fx-border-color: transparent transparent -aula-linea transparent;
+}
+.encabezado-resultados .primario { -fx-min-height: 44px; -fx-padding: 8 16; }
+.vista-resultados:compacto .encabezado-resultados { -fx-padding: 8 24 8 24; }
+.vista-resultados:compacto .veredicto-resultados { -fx-spacing: 0; }
+.vista-resultados:compacto .titulo { -fx-font-size: 24px; }
+.vista-resultados:compacto .lista-resultados { -fx-padding: 8 24 16 24; }
+.vista-resultados:compacto .titulo-grupo { -fx-padding: 0 0 4 0; }
+.metadatos-informe { -fx-spacing: 8; }
+.resumen-datos { -fx-font-size: 18px; }
+.explicacion-prioritaria { -fx-font-size: 16px; -fx-font-weight: bold; -fx-text-fill: -aula-aviso; }
+.pestanas-diagnostico { -fx-tab-min-height: 36px; }
+.pestanas-diagnostico > .tab-header-area { -fx-padding: 8 24 4 24; }
 .pestanas-diagnostico > .tab-header-area > .tab-header-background {
     -fx-background-color: -aula-fondo;
     -fx-border-color: transparent transparent -aula-linea transparent;
 }
 .pestanas-diagnostico .tab {
-    -fx-background-color: -aula-superficie;
+    -fx-background-color: transparent;
     -fx-background-insets: 0;
-    -fx-background-radius: 7 7 0 0;
+    -fx-background-radius: 4;
     -fx-border-color: transparent transparent -aula-linea transparent;
-    -fx-padding: 1 12 0 12;
+    -fx-padding: 0 12;
 }
 .pestanas-diagnostico .tab-label { -fx-text-fill: -aula-secundario; -fx-font-size: 14px; }
 .pestanas-diagnostico .tab:selected {
     -fx-background-color: -aula-accion-suave;
-    -fx-border-width: 0 0 3 0;
-    -fx-border-color: transparent transparent -aula-accion transparent;
+    -fx-border-color: transparent;
 }
-.pestanas-diagnostico .tab:selected .tab-label { -fx-text-fill: -aula-accion; -fx-font-weight: bold; }
+.pestanas-diagnostico .tab:selected .tab-label { -fx-text-fill: -aula-tinta; -fx-font-weight: bold; }
 .pestanas-diagnostico:focused .tab:selected .focus-indicator {
-    -fx-border-color: -aula-foco;
+    -fx-border-color: -aula-accion;
     -fx-border-width: 2;
     -fx-border-insets: 2;
 }
 .lista-resultados { -fx-padding: 12 24 16 24; }
-.detalle { -fx-padding: 9 12; -fx-background-color: -aula-fondo; }
-.hallazgo {
-    -fx-padding: 9 12;
+.titulo-grupo { -fx-padding: 0 0 8 0; -fx-border-color: transparent transparent -aula-linea transparent; }
+.grupo-recomendaciones { -fx-spacing: 12; }
+.ficha-recomendacion {
+    -fx-padding: 12 16;
     -fx-background-color: -aula-superficie;
     -fx-background-radius: 8;
     -fx-border-color: -aula-linea;
     -fx-border-radius: 8;
 }
+.accion-recomendada {
+    -fx-padding: 4 0 4 12;
+    -fx-border-color: transparent transparent transparent -aula-accion;
+    -fx-border-width: 0 0 0 3;
+}
+.etiqueta-recomendacion { -fx-text-fill: -aula-accion; -fx-font-size: 14px; -fx-font-weight: bold; }
+.vista-resultados:compacto .grupo-recomendaciones { -fx-spacing: 8; }
+.vista-resultados:compacto .ficha-recomendacion { -fx-padding: 8 12; -fx-spacing: 4; }
+.vista-resultados:compacto .accion-recomendada { -fx-spacing: 0; -fx-padding: 0 0 0 8; }
+.fila-informe { -fx-padding: 8 0; -fx-border-color: transparent transparent -aula-linea transparent; }
+.detalle { -fx-padding: 8 12; -fx-background-color: -aula-superficie; }
 .titled-pane > .title {
     -fx-background-color: -aula-superficie;
     -fx-background-radius: 8;
     -fx-border-color: -aula-control;
     -fx-border-radius: 8;
-    -fx-font-weight: bold;
-    -fx-padding: 9 11;
+    -fx-padding: 8 12;
 }
-.titled-pane:focused > .title { -fx-border-color: -aula-foco; -fx-border-width: 2; -fx-border-insets: -2; }
+.titled-pane:focused > .title { -fx-border-color: -aula-accion; -fx-border-width: 2; -fx-border-insets: -2; }
 .titled-pane > .content { -fx-border-color: -aula-linea; }
-.anotacion > .title { -fx-background-color: -aula-fondo; }
-.vista-resultados:compacto .encabezado-resultados { -fx-padding: 5 18 5 18; -fx-spacing: 5; }
-.vista-resultados:compacto .resumen { -fx-padding: 3 12; -fx-spacing: 1; }
-.vista-resultados:compacto .titulo { -fx-font-size: 24px; }
-.vista-resultados:compacto .metrica { -fx-padding: 2 10; -fx-spacing: 0; }
-.vista-resultados:compacto .numero { -fx-font-size: 20px; }
-.vista-resultados:compacto .lista-resultados { -fx-padding: 8 24 16 24; }
-.zona-carga { -fx-background-color: -aula-accion-suave; -fx-padding: 8 19; }
-.aviso { -fx-background-color: -aula-barrera-fondo; -fx-padding: 8 19; }
+.guia-criterio > .title, .guia-criterio > .content {
+    -fx-background-color: -aula-accion-suave;
+    -fx-border-color: transparent transparent transparent -aula-accion;
+    -fx-border-width: 0 0 0 4;
+}
+.guia-criterio > .title { -fx-font-weight: bold; }
+.guia-criterio:focused > .title { -fx-border-color: -aula-accion; -fx-border-width: 2; }
+.contenido-guia { -fx-padding: 8 16 12 16; }
+.condicion-guia { -fx-padding: 8 0 0 0; -fx-border-color: -aula-linea transparent transparent transparent; }
+.anotacion > .title { -fx-background-color: transparent; -fx-border-color: transparent; -fx-padding: 4 0; }
+.anotacion > .title > .text { -fx-fill: -aula-accion; -fx-underline: true; }
+.anotacion:focused > .title { -fx-border-color: -aula-accion; }
+.pie-resultados { -fx-background-color: -aula-superficie; }
+.estado-exportacion { -fx-padding: 4 24; }
+.estado-exportacion:focused { -fx-border-insets: 4 0 4 16; }
+.zona-carga { -fx-background-color: -aula-accion-suave; -fx-padding: 8 20; }
+.aviso { -fx-background-color: -aula-error-fondo; -fx-padding: 8 20; }

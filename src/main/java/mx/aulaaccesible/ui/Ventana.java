@@ -9,10 +9,9 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressIndicator;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import mx.aulaaccesible.ServicioEvaluacion;
+import mx.aulaaccesible.informe.InformeEvaluacion;
 import mx.aulaaccesible.model.Criterio;
 import mx.aulaaccesible.model.Evaluacion;
 import mx.aulaaccesible.model.Respuesta;
@@ -36,7 +35,7 @@ public final class Ventana {
     @FXML private Label pasoResultados;
     @FXML private VBox zonaEstado;
 
-    private final ServicioEvaluacion servicio = new ServicioEvaluacion(new ClienteProlog(ConfiguracionProlog.localizar()));
+    private ServicioEvaluacion servicio;
     private List<Criterio> catalogo = List.of();
     private List<List<Criterio>> secciones = List.of();
     private List<Respuesta> estadoInicial = List.of();
@@ -44,6 +43,9 @@ public final class Ventana {
     private int seccion;
     private int indiceCriterio;
     private Cuestionario cuestionario;
+    private String borradorSoftware = "";
+    private String borradorSeccion = "";
+    private boolean conexionFallida;
 
     @FXML
     private void initialize() {
@@ -52,59 +54,62 @@ public final class Ventana {
     }
 
     private void conectar() {
-        enSegundoPlano("Conectando con SWI-Prolog…", servicio::catalogo, criterios -> {
+        servicio = new ServicioEvaluacion(new ClienteProlog(ConfiguracionProlog.localizar()));
+        enSegundoPlano("Preparando la evaluación…", servicio::catalogo, criterios -> {
             catalogo = criterios;
             secciones = criterios.stream().collect(Collectors.groupingBy(
                     Criterio::area, LinkedHashMap::new, Collectors.toList())).values().stream().toList();
+            conexionFallida = false;
+            inicio(true);
+        }, error -> {
+            conexionFallida = true;
             inicio(true);
         });
     }
 
     private void inicio(boolean moverFoco) {
-        var software = campo("", "Ej. Plataforma de matemáticas", 120);
-        var seccionSoftware = campo("", "Ej. Cuestionario de la unidad 2", 120);
-        var iniciar = boton("Nueva evaluación", "primario",
+        var software = campo(borradorSoftware, "Ej. Aula virtual", 120);
+        var seccionSoftware = campo(borradorSeccion, "Ej. Entrega de tareas", 120);
+        software.textProperty().addListener((obs, anterior, valor) -> borradorSoftware = valor);
+        seccionSoftware.textProperty().addListener((obs, anterior, valor) -> borradorSeccion = valor);
+        var iniciar = boton("Iniciar evaluación", "primario",
                 () -> nueva(software.getText(), seccionSoftware.getText()));
-        var cargar = boton("Cargar ejemplo", "secundario", this::cargarEjemplo);
+        var cargar = boton("Probar con un ejemplo", "enlace", this::cargarEjemplo);
         boolean conectado = !catalogo.isEmpty();
         iniciar.setDisable(!conectado);
         cargar.setDisable(!conectado);
-        var campos = caja(14, "formulario-inicio", texto("Nueva evaluación", "titulo-seccion"),
-                texto("Si quieres identificar el diagnóstico, añade estos datos.", "ayuda"),
-                campoConEtiqueta("Software educativo (opcional)", software),
-                campoConEtiqueta("Sección evaluada (opcional)", seccionSoftware), iniciar);
-        var ejemplo = caja(7, "tarjeta-ejemplo", texto("Explora un caso de prueba", "subtitulo"),
-                texto("Abre un cuestionario con respuestas que puedes revisar y editar.", "ayuda"), cargar);
-        var panel = caja(0, "panel-inicio", campos, ejemplo);
-        if (evaluacion != null) {
-            panel.getChildren().add(caja(0, "sesion-inicio",
-                    boton("Continuar evaluación", "enlace", () -> mostrarCuestionario(seccion, indiceCriterio))));
-        }
-
-        var titulo = texto("Evalúa la accesibilidad de una sección", "titulo-inicio");
+        var titulo = texto("¿Qué vas a evaluar?", "titulo-inicio");
         titulo.setFocusTraversable(true);
-        var indicadores = fila("indicadores-inicio", caja(0, "dato-inicio", texto("24", "cifra-inicio"),
-                        texto("criterios", "dato-texto")),
-                caja(0, "dato-inicio", texto("6", "cifra-inicio"), texto("áreas", "dato-texto")));
-        var hero = caja(18, "hero", titulo,
-                texto("Identifica barreras en software educativo y descubre qué corregir primero.", "introduccion"),
-                indicadores);
-        var contenido = fila("pagina-inicio", hero, panel);
-        HBox.setHgrow(hero, Priority.ALWAYS);
-        HBox.setHgrow(panel, Priority.ALWAYS);
-        hero.setMaxWidth(Double.MAX_VALUE);
-        panel.setMaxWidth(Double.MAX_VALUE);
-        contenido.setMaxWidth(1140);
-        var estado = fila("estado-inicio", texto(conectado ? "Motor de diagnóstico listo" : "Motor de diagnóstico sin conectar",
-                conectado ? "estado-conectado" : "ayuda"));
-        if (!conectado) {
-            estado.getChildren().add(boton("Reintentar conexión", "secundario", this::conectar));
+        var contexto = conectado
+                ? "Revisa " + catalogo.size() + " criterios de accesibilidad en " + secciones.size() + " áreas."
+                : "Revisa la accesibilidad básica y consulta qué corregir primero.";
+        var datosSoftware = campoConEtiqueta("Software educativo", software);
+        var datosSeccion = campoConEtiqueta("Sección a evaluar", seccionSoftware);
+        var formulario = caja(20, "formulario-inicio",
+                texto("Ambos campos son opcionales.", "ayuda"),
+                datosSoftware, datosSeccion,
+                fila("acciones-inicio", iniciar, cargar));
+        if (evaluacion != null) {
+            formulario.getChildren().add(boton("Continuar evaluación", "enlace",
+                    () -> mostrarCuestionario(seccion, indiceCriterio)));
         }
-        estado.setMaxWidth(1140);
-        VBox pagina = caja(12, "marco-inicio", contenido, estado);
+        var contenido = caja(20, "contenido-inicio", caja(8, "cabecera-inicio",
+                texto("Nueva evaluación", "etiqueta-inicio"), titulo, texto(contexto, "introduccion")),
+                formulario);
+        contenido.setMaxWidth(620);
+        Node foco = titulo;
+        if (conexionFallida) {
+            var reintentar = boton("Reintentar conexión", "secundario", this::conectar);
+            contenido.getChildren().add(1, caja(8, "aviso-inicio",
+                    texto("No pudimos conectar con SWI-Prolog.", "error-campo"),
+                    texto("Comprueba que SWI-Prolog esté disponible y reintenta. Si cambiaste su configuración, vuelve a abrir la aplicación.", "texto"),
+                    reintentar));
+            foco = reintentar;
+        }
+        VBox pagina = caja(0, "marco-inicio", contenido);
         cambiarPantalla(desplazar(pagina), pasoInicio);
         if (moverFoco) {
-            enfocar(titulo);
+            enfocar(foco);
         }
     }
 
@@ -116,7 +121,7 @@ public final class Ventana {
 
     private void cargarEjemplo() {
         if (confirmarReemplazo()) {
-            enSegundoPlano("Cargando el caso del PDF…", () -> servicio.ejemplo(catalogo), this::iniciarEvaluacion);
+            enSegundoPlano("Cargando el ejemplo…", () -> servicio.ejemplo(catalogo), this::iniciarEvaluacion);
         }
     }
 
@@ -129,6 +134,7 @@ public final class Ventana {
         var aviso = new Alert(Alert.AlertType.CONFIRMATION,
                 "Al reemplazarla se perderán las respuestas y anotaciones que modificaste.", cancelar, reemplazar);
         aviso.initOwner(pantalla.getScene().getWindow());
+        aviso.getDialogPane().getStylesheets().addAll(pantalla.getScene().getStylesheets());
         aviso.setTitle("Reemplazar evaluación");
         aviso.setHeaderText("La evaluación actual tiene cambios");
         return aviso.showAndWait().orElse(cancelar) == reemplazar;
@@ -149,6 +155,18 @@ public final class Ventana {
         cuestionario.enfocarTitulo();
     }
 
+    private void mostrarCriterio(String id) {
+        for (int i = 0; i < secciones.size(); i++) {
+            var criterios = secciones.get(i);
+            for (int j = 0; j < criterios.size(); j++) {
+                if (criterios.get(j).id().equals(id)) {
+                    mostrarCuestionario(i, j);
+                    return;
+                }
+            }
+        }
+    }
+
     private void diagnosticar() {
         for (int i = 0; i < secciones.size(); i++) {
             var criterios = secciones.get(i);
@@ -162,8 +180,9 @@ public final class Ventana {
                 }
             }
         }
-        enSegundoPlano("Prolog está evaluando las respuestas…", () -> servicio.diagnosticar(evaluacion, catalogo), resultado -> {
-            var vista = new Resultados(evaluacion, catalogo, resultado,
+        enSegundoPlano("Generando el diagnóstico…", () -> new InformeEvaluacion(
+                evaluacion, catalogo, servicio.diagnosticar(evaluacion, catalogo)), informe -> {
+            var vista = new Resultados(informe, this::mostrarCriterio,
                     () -> mostrarCuestionario(seccion, indiceCriterio), () -> nueva("", ""), () -> inicio(true));
             cambiarPantalla(vista.vista(), pasoResultados);
             vista.enfocarTitulo();
@@ -174,10 +193,10 @@ public final class Ventana {
         zonaEstado.getChildren().clear();
         pantalla.setCenter(contenido);
         for (Label paso : List.of(pasoInicio, pasoCuestionario, pasoResultados)) {
-            paso.getStyleClass().remove("paso-activo");
+            paso.getParent().getStyleClass().remove("paso-activo");
             paso.setAccessibleText(paso.getText() + (paso == pasoActual ? ", actual" : ""));
         }
-        pasoActual.getStyleClass().add("paso-activo");
+        pasoActual.getParent().getStyleClass().add("paso-activo");
     }
 
     private void mensaje(String contenido, String estilo) {
@@ -186,9 +205,17 @@ public final class Ventana {
     }
 
     private <T> void enSegundoPlano(String mensaje, Callable<T> trabajo, Consumer<T> completar) {
+        enSegundoPlano(mensaje, trabajo, completar, error -> {
+            String detalle = error.getMessage();
+            mensaje(detalle == null ? "No se pudo completar la operación." : detalle.lines().findFirst().orElse(""), "aviso");
+        });
+    }
+
+    private <T> void enSegundoPlano(String mensaje, Callable<T> trabajo, Consumer<T> completar,
+                                    Consumer<Throwable> fallar) {
         Node foco = pantalla.getScene() == null ? null : pantalla.getScene().getFocusOwner();
         var carga = new ProgressIndicator();
-        carga.setPrefSize(19, 19);
+        carga.setPrefSize(20, 20);
         pantalla.setDisable(true);
         zonaEstado.getChildren().setAll(fila("zona-carga", carga, texto(mensaje, "texto")));
         Task<T> tarea = new Task<>() {
@@ -201,12 +228,13 @@ public final class Ventana {
         });
         tarea.setOnFailed(evento -> {
             pantalla.setDisable(false);
-            String detalle = tarea.getException().getMessage();
-            System.err.println(detalle);
-            mensaje(detalle == null ? "No se pudo completar la operación." : detalle.lines().findFirst().orElse(""), "aviso");
-            if (foco != null) {
+            var error = tarea.getException();
+            System.err.println(error.getMessage());
+            zonaEstado.getChildren().clear();
+            if (foco != null && foco.getScene() != null) {
                 enfocar(foco);
             }
+            fallar.accept(error);
         });
         var hilo = new Thread(tarea, "consulta-prolog");
         hilo.setDaemon(true);
