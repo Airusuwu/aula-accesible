@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.VBox?>
+
+<BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="mx.aulaaccesible.ui.Ventana">
+    <top>
+        <HBox styleClass="barra-superior" alignment="CENTER_LEFT" spacing="10">
+            <Label text="Aa" styleClass="marca" />
+            <Label text="Aula Accesible" styleClass="nombre-app" />
+            <Region HBox.hgrow="ALWAYS" />
+            <HBox styleClass="indicador-pasos" spacing="3" alignment="CENTER_RIGHT">
+                <Label fx:id="pasoInicio" text="Inicio" styleClass="paso" />
+                <Label fx:id="pasoCuestionario" text="Cuestionario" styleClass="paso" />
+                <Label fx:id="pasoResultados" text="Resultados" styleClass="paso" />
+            </HBox>
+        </HBox>
+    </top>
+    <center>
+        <BorderPane fx:id="pantalla" />
+    </center>
+    <bottom>
+        <VBox fx:id="zonaEstado" />
+    </bottom>
+</BorderPane>

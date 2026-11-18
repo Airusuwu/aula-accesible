@@ -1,0 +1,9 @@
+/.tools/
+/target/
+/dist/
+/.idea/
+*.iml
+/Aula_Accesible_Hechos_y_Reglas.pdf
+/PLAN.md
+/.github/modernize/java-upgrade/
+*.log
