@@ -1,7 +1,54 @@
-/* Colores y controles compartidos por las tres pantallas. */
+/*
+ * Tema de Aula Accesible. Los tokens -aula-* se definen para el tema oscuro (el predeterminado) y se
+ * redefinen en .tema-claro. La base de controles viene de AtlantaFX (PrimerDark / PrimerLight);
+ * aquí se ajusta la marca y se conservan las clases que usa la interfaz.
+ */
 .root {
+    -aula-fondo: #0f1714;
+    -aula-superficie: #16211d;
+    -aula-elevada: #1d2a25;
+    -aula-tinta: #e6efe9;
+    -aula-secundario: #a3b5ad;
+    -aula-linea: #2b3a34;
+    -aula-control: #6f877d;
+    -aula-accion: #3ddc97;
+    -aula-accion-hover: #6aeab2;
+    -aula-accion-suave: #1c3a2e;
+    -aula-sobre-accion: #06241a;
+    -aula-bosque: #0a120f;
+    -aula-activo: #5ce5ac;
+    -aula-aviso: #f0b35a;
+    -aula-error: #ff8a9b;
+    -aula-error-fondo: #3a1a21;
+    -aula-sombra: rgba(0, 0, 0, 0.45);
+
+    -fx-font-family: "Atkinson Hyperlegible";
+    -fx-font-size: 16px;
+    -fx-background-color: -aula-fondo;
+    -fx-focus-color: -aula-accion;
+    -fx-faint-focus-color: transparent;
+
+    /* Variables de AtlantaFX, para que los controles nativos usen la paleta de la marca. */
+    -color-bg-default: -aula-fondo;
+    -color-bg-overlay: -aula-elevada;
+    -color-bg-subtle: -aula-superficie;
+    -color-bg-inset: -aula-fondo;
+    -color-fg-default: -aula-tinta;
+    -color-fg-muted: -aula-secundario;
+    -color-fg-subtle: -aula-secundario;
+    -color-border-default: -aula-control;
+    -color-border-muted: -aula-linea;
+    -color-border-subtle: -aula-linea;
+    -color-accent-fg: -aula-accion;
+    -color-accent-emphasis: -aula-accion;
+    -color-accent-muted: -aula-accion;
+    -color-accent-subtle: -aula-accion-suave;
+}
+
+.root.tema-claro {
     -aula-fondo: #f7f7f3;
     -aula-superficie: #ffffff;
+    -aula-elevada: #ffffff;
     -aula-tinta: #102d27;
     -aula-secundario: #435a54;
     -aula-linea: #c4d0ca;
@@ -9,20 +56,13 @@
     -aula-accion: #006447;
     -aula-accion-hover: #004a35;
     -aula-accion-suave: #d6e9df;
+    -aula-sobre-accion: #ffffff;
     -aula-bosque: #0d352b;
     -aula-activo: #5ce5ac;
     -aula-aviso: #8b470e;
     -aula-error: #992c3f;
     -aula-error-fondo: #fff0f2;
-
-    -fx-font-family: "Atkinson Hyperlegible";
-    -fx-font-size: 16px;
-    -fx-base: -aula-superficie;
-    -fx-background: -aula-fondo;
-    -fx-background-color: -aula-fondo;
-    -fx-accent: -aula-accion;
-    -fx-focus-color: -aula-accion;
-    -fx-faint-focus-color: #00644733;
+    -aula-sombra: rgba(16, 45, 39, 0.18);
 }
 
 .label, .button, .radio-button, .check-box, .choice-box { -fx-text-fill: -aula-tinta; }
@@ -33,17 +73,34 @@
 .titulo-grupo, .subtitulo { -fx-font-size: 18px; -fx-font-weight: bold; }
 .sobrelinea { -fx-font-size: 14px; -fx-text-fill: -aula-secundario; }
 
+/* Iconos: decorativos, heredan el color del texto salvo que se indique otro. */
+.icono-boton, .icono-area, .icono-valor, .icono-estado { -fx-icon-color: -aula-tinta; -fx-icon-size: 20; }
+.primario .icono-boton { -fx-icon-color: -aula-sobre-accion; }
+.enlace .icono-boton { -fx-icon-color: -aula-accion; }
+
 .barra-superior {
     -fx-background-color: -aula-bosque;
     -fx-padding: 8 24;
+    -fx-effect: dropshadow(gaussian, -aula-sombra, 8, 0, 0, 2);
 }
 .indicador-paso { -fx-padding: 6 4; -fx-border-width: 0 0 3 0; -fx-border-color: transparent; }
 .indicador-paso.paso-activo { -fx-border-color: transparent transparent -aula-activo transparent; }
 .paso { -fx-text-fill: white; -fx-font-size: 16px; }
 .paso-activo .paso { -fx-font-weight: bold; }
-.trazo-paso, .placa-paso { -fx-stroke: white; -fx-stroke-width: 1.6; -fx-fill: transparent; }
-.placa-paso { -fx-fill: -aula-bosque; }
-.barra-paso { -fx-fill: white; }
+.icono-paso { -fx-icon-color: white; -fx-icon-size: 20; }
+.paso-activo .icono-paso { -fx-icon-color: -aula-activo; }
+.separador-barra { -fx-background-color: rgba(255, 255, 255, 0.25); }
+
+.boton-icono.button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-min-width: 40px;
+    -fx-min-height: 40px;
+    -fx-pref-width: 40px;
+    -fx-padding: 0;
+}
+.boton-icono.button:hover { -fx-background-color: rgba(255, 255, 255, 0.14); }
+.barra-superior .boton-icono .icono-boton { -fx-icon-color: white; -fx-icon-size: 22; }
 
 .scroll-pane { -fx-background-color: transparent; -fx-padding: 0; }
 .scroll-pane > .viewport { -fx-background-color: transparent; }
@@ -63,42 +120,107 @@
 .acciones-inicio .primario { -fx-min-height: 44px; -fx-padding: 8 16; }
 .aviso-inicio { -fx-background-color: -aula-error-fondo; -fx-background-radius: 8; -fx-padding: 16; }
 
-.cabecera-cuestionario { -fx-padding: 16 24 8 24; }
-.areas-cuestionario { -fx-spacing: 0; -fx-padding: 1; -fx-border-color: -aula-control; -fx-border-radius: 8; }
+/* Inicio a dos columnas: marca y áreas a la izquierda, formulario a la derecha. */
+.pantalla-inicio { -fx-background-color: -aula-fondo; }
+.panel-marca { -fx-padding: 56 56 40 72; -fx-alignment: CENTER_LEFT; }
+.panel-marca .cabecera-inicio { -fx-max-width: 860px; }
+.panel-marca .titulo-inicio { -fx-font-size: 48px; }
+.panel-marca .introduccion { -fx-font-size: 20px; }
+.rejilla-areas { -fx-max-width: 860px; }
+.tarjeta-area {
+    -fx-padding: 14 16;
+    -fx-spacing: 14;
+    -fx-background-color: -aula-superficie;
+    -fx-background-radius: 12;
+    -fx-border-color: -aula-linea;
+    -fx-border-radius: 12;
+}
+.tarjeta-area:hover { -fx-border-color: -aula-accion; }
+.insignia-area {
+    -fx-min-width: 44px; -fx-min-height: 44px; -fx-max-width: 44px; -fx-max-height: 44px;
+    -fx-background-color: -aula-accion-suave;
+    -fx-background-radius: 12;
+}
+.insignia-area .icono-area { -fx-icon-color: -aula-accion; -fx-icon-size: 24; }
+.tarjeta-area .subtitulo { -fx-font-size: 16px; }
+.panel-formulario { -fx-padding: 40 72 40 24; -fx-background-color: -aula-superficie; -fx-border-color: transparent transparent transparent -aula-linea; }
+.tarjeta-formulario {
+    -fx-padding: 32;
+    -fx-background-color: -aula-elevada;
+    -fx-background-radius: 16;
+    -fx-border-color: -aula-linea;
+    -fx-border-radius: 16;
+    -fx-effect: dropshadow(gaussian, -aula-sombra, 24, 0, 0, 8);
+}
+.tarjeta-formulario .formulario-inicio { -fx-padding: 0; -fx-border-color: transparent; }
+
+/* Cuestionario: barra lateral de áreas y criterios, tarjeta de pregunta y panel de guía. */
+.vista-cuestionario { -fx-background-color: -aula-fondo; }
+.barra-criterios {
+    -fx-background-color: -aula-superficie;
+    -fx-border-color: transparent -aula-linea transparent transparent;
+}
+.lista-criterios { -fx-padding: 12 8 12 8; }
+.encabezado-area { -fx-padding: 14 8 6 8; -fx-spacing: 10; }
+.encabezado-area .icono-area { -fx-icon-color: -aula-accion; -fx-icon-size: 20; }
+.nombre-area { -fx-font-size: 14px; -fx-font-weight: bold; -fx-text-fill: -aula-secundario; }
+.cantidad-area { -fx-font-size: 13px; -fx-text-fill: -aula-secundario; }
+.criterio-lateral.button {
+    -fx-background-color: transparent;
+    -fx-border-color: transparent;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-font-size: 15px;
+    -fx-min-height: 36px;
+    -fx-padding: 6 10;
+    -fx-alignment: CENTER_LEFT;
+}
+.criterio-lateral.button:hover { -fx-background-color: -aula-elevada; }
+.criterio-lateral.button:actual {
+    -fx-background-color: -aula-accion-suave;
+    -fx-text-fill: -aula-tinta;
+    -fx-font-weight: bold;
+}
+.marca-estado { -fx-min-width: 20px; -fx-min-height: 20px; }
+.marca-estado .icono-valor { -fx-icon-size: 18; -fx-icon-color: -aula-secundario; }
+.marca-estado.estado-si .icono-valor { -fx-icon-color: -aula-accion; }
+.marca-estado.estado-no .icono-valor { -fx-icon-color: -aula-error; }
+.marca-estado.estado-desconocido .icono-valor { -fx-icon-color: -aula-aviso; }
+.marca-estado.estado-no-aplica .icono-valor { -fx-icon-color: -aula-secundario; }
+.progreso-lateral {
+    -fx-padding: 14 16 12 16;
+    -fx-border-color: -aula-linea transparent transparent transparent;
+}
+.progreso-lateral .subtitulo { -fx-font-size: 15px; }
 .texto-progreso { -fx-text-fill: -aula-tinta; -fx-font-size: 15px; }
-.progreso-cuestionario .subtitulo { -fx-font-size: 16px; }
 .progress-bar { -fx-min-height: 12px; -fx-pref-height: 12px; -fx-max-height: 12px; }
 .progress-bar > .bar { -fx-background-color: -aula-accion; -fx-background-insets: 0; -fx-background-radius: 8; }
-.progress-bar > .track { -fx-background-color: #bcdbc9; -fx-background-insets: 0; -fx-background-radius: 8; }
-.segmentos-progreso { -fx-spacing: 0; }
-.segmento-progreso { -fx-border-color: transparent -aula-bosque transparent transparent; }
-.segmento-progreso.ultimo-segmento { -fx-border-color: transparent; }
-.seccion.button, .seccion-activa.button {
-    -fx-alignment: CENTER;
-    -fx-text-alignment: CENTER;
-    -fx-font-size: 15px;
-    -fx-min-height: 48px;
-    -fx-padding: 4 8;
-    -fx-background-radius: 0;
-    -fx-border-radius: 0;
+.progress-bar > .track { -fx-background-color: -aula-linea; -fx-background-insets: 0; -fx-background-radius: 8; }
+
+.zona-guia { -fx-background-color: -aula-superficie; -fx-border-color: transparent transparent transparent -aula-linea; }
+.panel-guia { -fx-padding: 24; }
+.encabezado-guia { -fx-spacing: 10; }
+.encabezado-guia .icono-area { -fx-icon-color: -aula-accion; -fx-icon-size: 22; }
+.panel-guia .contenido-guia { -fx-padding: 0; }
+
+.contenido-quiz { -fx-padding: 24 32 24 32; }
+.tarjeta-pregunta {
+    -fx-padding: 28 32;
+    -fx-background-color: -aula-superficie;
+    -fx-background-radius: 16;
+    -fx-border-color: -aula-linea;
+    -fx-border-radius: 16;
+    -fx-effect: dropshadow(gaussian, -aula-sombra, 18, 0, 0, 6);
 }
-.seccion.button { -fx-background-color: transparent; -fx-border-color: transparent -aula-linea transparent transparent; }
-.seccion.ultima-area.button { -fx-border-color: transparent; }
-.seccion-activa.button {
-    -fx-background-color: -aula-accion-suave;
-    -fx-text-fill: -aula-accion;
-    -fx-font-weight: bold;
-    -fx-border-color: transparent transparent -aula-accion transparent;
-    -fx-border-width: 0 0 3 0;
-}
-.contenido-quiz { -fx-padding: 12 24 24 24; }
-.vista-cuestionario:compacto .cabecera-cuestionario { -fx-padding: 8 24 4 24; -fx-spacing: 8; }
-.vista-cuestionario:compacto .progreso-cuestionario { -fx-spacing: 4; }
+.cabecera-criterio { -fx-spacing: 10; }
+.cabecera-criterio .icono-area { -fx-icon-color: -aula-accion; -fx-icon-size: 20; }
+.insignia-prioridad { -fx-spacing: 6; -fx-padding: 4 10; -fx-background-color: -aula-elevada; -fx-background-radius: 20; }
+.insignia-prioridad .icono-boton { -fx-icon-size: 16; -fx-icon-color: -aula-aviso; }
+.hueco-guia { -fx-spacing: 0; }
 .vista-cuestionario:compacto .contenido-quiz { -fx-padding: 8 24 16 24; }
-.vista-cuestionario:compacto .tarjeta-pregunta { -fx-spacing: 8; }
+.vista-cuestionario:compacto .tarjeta-pregunta { -fx-spacing: 8; -fx-padding: 16 24; }
 .vista-cuestionario:compacto .titulo-pregunta { -fx-font-size: 24px; }
 .contexto-criterio { -fx-font-size: 16px; }
-.selector-criterio { -fx-max-width: 368px; }
 .respuestas { -fx-padding: 4 0; }
 .confirmacion-motivo { -fx-background-color: -aula-fondo; -fx-background-radius: 8; -fx-padding: 8 12; }
 .error-campo { -fx-text-fill: -aula-error; -fx-font-size: 16px; }
@@ -113,7 +235,7 @@
     -fx-min-width: 192px;
     -fx-padding: 4 8;
 }
-.radio-button:hover { -fx-background-color: -aula-fondo; }
+.radio-button:hover { -fx-background-color: -aula-elevada; }
 .radio-button:selected { -fx-background-color: -aula-accion-suave; -fx-border-color: -aula-accion; }
 .radio-button:disabled { -fx-opacity: 0.60; }
 .radio-button > .radio {
@@ -132,7 +254,7 @@
     -fx-border-radius: 4;
 }
 .check-box:selected > .box { -fx-background-color: -aula-accion; -fx-border-color: -aula-accion; }
-.check-box:selected > .box > .mark { -fx-background-color: white; }
+.check-box:selected > .box > .mark { -fx-background-color: -aula-sobre-accion; }
 
 .pie-acciones {
     -fx-background-color: -aula-superficie;
@@ -148,8 +270,8 @@
     -fx-min-height: 40px;
     -fx-padding: 8 12;
 }
-.primario.button { -fx-background-color: -aula-accion; -fx-text-fill: white; -fx-border-color: -aula-accion; -fx-font-weight: bold; }
-.primario.button:hover, .primario.button:armed { -fx-background-color: -aula-accion-hover; }
+.primario.button { -fx-background-color: -aula-accion; -fx-text-fill: -aula-sobre-accion; -fx-border-color: -aula-accion; -fx-font-weight: bold; }
+.primario.button:hover, .primario.button:armed { -fx-background-color: -aula-accion-hover; -fx-border-color: -aula-accion-hover; }
 .secundario.button { -fx-background-color: -aula-superficie; -fx-border-color: -aula-control; }
 .secundario.button:hover, .seccion.button:hover { -fx-background-color: -aula-accion-suave; }
 .enlace.button { -fx-background-color: transparent; -fx-text-fill: -aula-accion; -fx-padding: 4 8; -fx-border-color: transparent; }
@@ -238,6 +360,8 @@
 .vista-resultados:compacto .accion-recomendada { -fx-spacing: 0; -fx-padding: 0 0 0 8; }
 .fila-informe { -fx-padding: 8 0; -fx-border-color: transparent transparent -aula-linea transparent; }
 .detalle { -fx-padding: 8 12; -fx-background-color: -aula-superficie; }
+.titled-pane { -fx-background-color: transparent; }
+.tarjeta-pregunta .titulo-pregunta { -fx-font-size: 30px; }
 .titled-pane > .title {
     -fx-background-color: -aula-superficie;
     -fx-background-radius: 8;
@@ -245,8 +369,10 @@
     -fx-border-radius: 8;
     -fx-padding: 8 12;
 }
+.titled-pane > .title > .text { -fx-fill: -aula-tinta; }
+.titled-pane > .title > .arrow-button > .arrow { -fx-background-color: -aula-tinta; }
 .titled-pane:focused > .title { -fx-border-color: -aula-accion; -fx-border-width: 2; -fx-border-insets: -2; }
-.titled-pane > .content { -fx-border-color: -aula-linea; }
+.titled-pane > .content { -fx-background-color: -aula-superficie; -fx-border-color: -aula-linea; }
 .guia-criterio > .title, .guia-criterio > .content {
     -fx-background-color: -aula-accion-suave;
     -fx-border-color: transparent transparent transparent -aula-accion;
@@ -264,3 +390,60 @@
 .estado-exportacion:focused { -fx-border-insets: 4 0 4 16; }
 .zona-carga { -fx-background-color: -aula-accion-suave; -fx-padding: 8 20; }
 .aviso { -fx-background-color: -aula-error-fondo; -fx-padding: 8 20; }
+
+/* Diálogos y ayudas emergentes toman los mismos colores. */
+.dialog-pane { -fx-background-color: -aula-elevada; }
+.dialog-pane > .content.label { -fx-text-fill: -aula-tinta; }
+.dialog-pane > .header-panel { -fx-background-color: -aula-elevada; }
+.dialog-pane > .header-panel .label { -fx-text-fill: -aula-tinta; -fx-font-weight: bold; }
+.tooltip { -fx-background-color: -aula-elevada; -fx-text-fill: -aula-tinta; -fx-font-size: 14px; -fx-background-radius: 6; }
+
+/* Resultados: icono de estado, tarjetas de métricas y recomendaciones en mosaico. */
+.zona-superior-resultados { -fx-background-color: -aula-fondo; }
+.insignia-estado {
+    -fx-min-width: 56px; -fx-min-height: 56px; -fx-max-width: 56px; -fx-max-height: 56px;
+    -fx-background-radius: 16;
+    -fx-background-color: -aula-accion-suave;
+}
+.insignia-estado .icono-estado { -fx-icon-size: 32; -fx-icon-color: -aula-accion; }
+.insignia-estado.estado-critico { -fx-background-color: -aula-error-fondo; }
+.insignia-estado.estado-critico .icono-estado { -fx-icon-color: -aula-error; }
+.insignia-estado.estado-mejoras { -fx-background-color: -aula-elevada; }
+.insignia-estado.estado-mejoras .icono-estado { -fx-icon-color: -aula-aviso; }
+.insignia-estado.estado-info { -fx-background-color: -aula-elevada; }
+.insignia-estado.estado-info .icono-estado { -fx-icon-color: -aula-secundario; }
+
+.fila-metricas { -fx-padding: 12 24 16 24; -fx-spacing: 16; }
+.tarjeta-metrica {
+    -fx-padding: 14 18;
+    -fx-spacing: 14;
+    -fx-alignment: CENTER_LEFT;
+    -fx-background-color: -aula-superficie;
+    -fx-background-radius: 14;
+    -fx-border-color: -aula-linea;
+    -fx-border-radius: 14;
+}
+.tarjeta-metrica { -fx-min-height: 88px; -fx-pref-height: 88px; -fx-max-height: 88px; }
+.button.tarjeta-metrica { -fx-padding: 14 18; -fx-background-radius: 14; -fx-border-radius: 14; -fx-min-height: 88px; }
+.button.tarjeta-metrica:hover { -fx-background-color: -aula-elevada; -fx-border-color: -aula-accion; }
+.numero-metrica { -fx-font-size: 30px; -fx-font-weight: bold; }
+.rotulo-metrica { -fx-font-size: 15px; -fx-text-fill: -aula-secundario; }
+.icono-metrica { -fx-icon-size: 34; -fx-icon-color: -aula-secundario; }
+.metrica-si .icono-metrica { -fx-icon-color: -aula-accion; }
+.metrica-no .icono-metrica { -fx-icon-color: -aula-error; }
+.metrica-pendiente .icono-metrica { -fx-icon-color: -aula-aviso; }
+.mosaico-recomendaciones { -fx-hgap: 16; -fx-vgap: 16; }
+.mosaico-recomendaciones .ficha-recomendacion { -fx-max-width: infinity; }
+
+/* Resultados en ventanas bajas: encabezado y métricas más compactos para dejar sitio a la lista. */
+.vista-resultados:compacto .fila-metricas { -fx-padding: 4 24 8 24; -fx-spacing: 12; }
+.vista-resultados:compacto .tarjeta-metrica,
+.vista-resultados:compacto .button.tarjeta-metrica { -fx-min-height: 56px; -fx-pref-height: 56px; -fx-max-height: 56px; -fx-padding: 6 14; }
+.vista-resultados:compacto .numero-metrica { -fx-font-size: 22px; }
+.vista-resultados:compacto .rotulo-metrica { -fx-font-size: 14px; }
+.vista-resultados:compacto .icono-metrica { -fx-icon-size: 26; }
+.vista-resultados:compacto .insignia-estado {
+    -fx-min-width: 40px; -fx-min-height: 40px; -fx-max-width: 40px; -fx-max-height: 40px;
+}
+.vista-resultados:compacto .insignia-estado .icono-estado { -fx-icon-size: 24; }
+.vista-resultados:compacto .resumen-datos { -fx-font-size: 16px; }

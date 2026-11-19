@@ -39,8 +39,12 @@ try {
         if ($plataforma.Count -ne 1) { throw "Falta el modulo JavaFX para Windows x64: $modulo" }
         Copy-Item -LiteralPath $plataforma[0].FullName -Destination $fx
     }
-    Get-ChildItem -LiteralPath $libs -Filter 'jackson-*.jar' |
-        ForEach-Object { Copy-Item -LiteralPath $_.FullName -Destination $entrada }
+    # Estas librerías van en el classpath (junto al jar), no en el module-path de JavaFX.
+    foreach ($patron in @('jackson-*.jar', 'atlantafx-*.jar', 'ikonli-*.jar')) {
+        $encontrados = @(Get-ChildItem -LiteralPath $libs -Filter $patron)
+        if ($encontrados.Count -eq 0) { throw "Falta la dependencia de runtime '$patron' en target/dependency." }
+        $encontrados | ForEach-Object { Copy-Item -LiteralPath $_.FullName -Destination $entrada }
+    }
 
     $opciones = @('--type', 'app-image', '--name', 'Aula Accesible', '--app-version', $version,
         '--dest', $destino, '--input', $entrada, '--main-jar', "aula-accesible-$version.jar",
