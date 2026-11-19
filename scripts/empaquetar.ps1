@@ -34,19 +34,23 @@ try {
     New-Item -ItemType Directory -Path $fx, $destino -Force | Out-Null
     Copy-Item -LiteralPath (Join-Path $proyecto "target/aula-accesible-$version.jar") -Destination $entrada
     $libs = Join-Path $proyecto 'target/dependency'
-    foreach ($modulo in @('base', 'graphics', 'controls', 'fxml')) {
+    foreach ($modulo in @('base', 'graphics', 'controls', 'fxml', 'media')) {
         $plataforma = @(Get-ChildItem -LiteralPath $libs -Filter "javafx-$modulo-*-win.jar")
         if ($plataforma.Count -ne 1) { throw "Falta el modulo JavaFX para Windows x64: $modulo" }
         Copy-Item -LiteralPath $plataforma[0].FullName -Destination $fx
     }
-    Get-ChildItem -LiteralPath $libs -Filter 'jackson-*.jar' |
-        ForEach-Object { Copy-Item -LiteralPath $_.FullName -Destination $entrada }
+    # Estas librerías van en el classpath (junto al jar), no en el module-path de JavaFX.
+    foreach ($patron in @('jackson-*.jar', 'atlantafx-*.jar', 'ikonli-*.jar')) {
+        $encontrados = @(Get-ChildItem -LiteralPath $libs -Filter $patron)
+        if ($encontrados.Count -eq 0) { throw "Falta la dependencia de runtime '$patron' en target/dependency." }
+        $encontrados | ForEach-Object { Copy-Item -LiteralPath $_.FullName -Destination $entrada }
+    }
 
     $opciones = @('--type', 'app-image', '--name', 'Aula Accesible', '--app-version', $version,
         '--dest', $destino, '--input', $entrada, '--main-jar', "aula-accesible-$version.jar",
         '--main-class', 'mx.aulaaccesible.Lanzador', '--add-modules',
         'java.desktop,java.xml,java.logging,java.scripting,jdk.unsupported,jdk.crypto.ec',
-        '--java-options', '--module-path=$APPDIR/fx', '--java-options', '--add-modules=javafx.controls,javafx.fxml')
+        '--java-options', '--module-path=$APPDIR/fx', '--java-options', '--add-modules=javafx.controls,javafx.fxml,javafx.media')
     & $jpackage @opciones
     if ($LASTEXITCODE -ne 0) { throw 'jpackage no pudo generar el lanzador.' }
 

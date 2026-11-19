@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Rectangle2D?>
-<?import javafx.scene.Group?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Tooltip?>
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
-<?import javafx.scene.shape.Line?>
-<?import javafx.scene.shape.Rectangle?>
+<?import org.kordamp.ikonli.javafx.FontIcon?>
 
 <BorderPane xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
             fx:controller="mx.aulaaccesible.ui.Ventana">
@@ -26,33 +26,33 @@
                 </viewport>
             </ImageView>
             <Region HBox.hgrow="ALWAYS" />
+            <!-- Los pasos son botones: llevan a su pantalla. Ventana.actualizarPasos fija cuál es el actual y cuáles
+                 no están disponibles todavía (Cuestionario y Resultados necesitan una evaluación). -->
             <HBox styleClass="indicador-pasos" spacing="12" alignment="CENTER_RIGHT">
-                <HBox styleClass="indicador-paso" alignment="CENTER" spacing="8">
-                    <Group mouseTransparent="true">
-                        <Line startX="1" startY="8" endX="9" endY="1" styleClass="trazo-paso" />
-                        <Line startX="9" startY="1" endX="17" endY="8" styleClass="trazo-paso" />
-                        <Rectangle x="4" y="7" width="10" height="10" styleClass="trazo-paso" />
-                        <Rectangle x="8" y="12" width="3" height="5" styleClass="trazo-paso" />
-                    </Group>
-                    <Label fx:id="pasoInicio" text="Inicio" styleClass="paso" />
-                </HBox>
-                <HBox styleClass="indicador-paso" alignment="CENTER" spacing="8">
-                    <Group mouseTransparent="true">
-                        <Rectangle x="2" y="4" width="14" height="14" arcWidth="3" arcHeight="3" styleClass="trazo-paso" />
-                        <Rectangle x="6" y="1" width="6" height="5" arcWidth="2" arcHeight="2" styleClass="placa-paso" />
-                        <Line startX="6" startY="10" endX="12" endY="10" styleClass="trazo-paso" />
-                        <Line startX="6" startY="14" endX="12" endY="14" styleClass="trazo-paso" />
-                    </Group>
-                    <Label fx:id="pasoCuestionario" text="Cuestionario" styleClass="paso" />
-                </HBox>
-                <HBox styleClass="indicador-paso" alignment="CENTER" spacing="8">
-                    <Group mouseTransparent="true">
-                        <Rectangle x="1" y="12" width="3" height="6" styleClass="barra-paso" />
-                        <Rectangle x="7" y="7" width="3" height="11" styleClass="barra-paso" />
-                        <Rectangle x="13" y="1" width="3" height="17" styleClass="barra-paso" />
-                    </Group>
-                    <Label fx:id="pasoResultados" text="Resultados" styleClass="paso" />
-                </HBox>
+                <Button fx:id="pasoInicio" text="Inicio" styleClass="indicador-paso" onAction="#irAInicio">
+                    <graphic><FontIcon iconLiteral="mdi2h-home-outline" styleClass="icono-paso" /></graphic>
+                </Button>
+                <Button fx:id="pasoCuestionario" text="Cuestionario" styleClass="indicador-paso" onAction="#irACuestionario">
+                    <graphic><FontIcon iconLiteral="mdi2c-clipboard-list-outline" styleClass="icono-paso" /></graphic>
+                </Button>
+                <Button fx:id="pasoResultados" text="Resultados" styleClass="indicador-paso" onAction="#irAResultados">
+                    <graphic><FontIcon iconLiteral="mdi2c-chart-bar" styleClass="icono-paso" /></graphic>
+                </Button>
+            </HBox>
+            <Region styleClass="separador-barra" prefWidth="1" minWidth="1" maxWidth="1" prefHeight="24" />
+            <HBox spacing="4" alignment="CENTER_RIGHT">
+                <Button fx:id="botonSonido" styleClass="boton-icono" onAction="#alternarSonido">
+                    <graphic><FontIcon fx:id="iconoSonido" iconLiteral="mdi2v-volume-high" styleClass="icono-boton" /></graphic>
+                    <tooltip><Tooltip fx:id="ayudaSonido" text="Silenciar sonidos" /></tooltip>
+                </Button>
+                <Button fx:id="botonMovimiento" styleClass="boton-icono" onAction="#alternarMovimiento">
+                    <graphic><FontIcon fx:id="iconoMovimiento" iconLiteral="mdi2m-motion-play-outline" styleClass="icono-boton" /></graphic>
+                    <tooltip><Tooltip fx:id="ayudaMovimiento" text="Reducir movimiento" /></tooltip>
+                </Button>
+                <Button fx:id="botonTema" styleClass="boton-icono" onAction="#alternarTema">
+                    <graphic><FontIcon fx:id="iconoTema" iconLiteral="mdi2w-white-balance-sunny" styleClass="icono-boton" /></graphic>
+                    <tooltip><Tooltip fx:id="ayudaTema" text="Cambiar a tema claro" /></tooltip>
+                </Button>
             </HBox>
         </HBox>
     </top>

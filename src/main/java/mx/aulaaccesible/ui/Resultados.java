@@ -1,21 +1,29 @@
 package mx.aulaaccesible.ui;
 
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.css.PseudoClass;
+import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.Tooltip;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import mx.aulaaccesible.informe.ExportadorInformeHtml;
 import mx.aulaaccesible.informe.InformeEvaluacion;
+import mx.aulaaccesible.model.Valor;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
@@ -57,9 +65,12 @@ final class Resultados {
                 texto(informe.explicacion(), diagnostico.estado().equals("requiere_atencion_prioritaria")
                         ? "explicacion-prioritaria" : "texto"), metadatos);
         HBox.setHgrow(veredicto, Priority.ALWAYS);
-        var exportar = boton("Exportar informe", "primario", this::exportarInforme);
+        var exportar = boton("Exportar informe", "mdi2e-export-variant", "primario", this::exportarInforme);
         exportar.setMinWidth(Region.USE_PREF_SIZE);
-        var encabezado = fila("encabezado-resultados", veredicto, exportar);
+        var insigniaEstado = new StackPane(Iconos.estado(diagnostico.estado()));
+        insigniaEstado.getStyleClass().addAll("insignia-estado", claseEstado(diagnostico.estado()));
+        insigniaEstado.setAlignment(Pos.CENTER);
+        var encabezado = fila("encabezado-resultados", insigniaEstado, veredicto, exportar);
 
         var recomendaciones = pestana("Recomendaciones", conteos.barreras(), recomendaciones());
         var pendientes = pestana("Pendientes", conteos.pendientes(), pendientes(irAlCriterio));
@@ -72,12 +83,22 @@ final class Resultados {
             pestanas.getSelectionModel().select(conteos.pendientes() > 0 ? pendientes : favorables);
         }
 
+        var metricas = fila("fila-metricas",
+                tarjetaMetrica("Favorables", conteos.favorables(), Valor.SI, "metrica-si",
+                        () -> pestanas.getSelectionModel().select(favorables)),
+                tarjetaMetrica("Barreras", conteos.barreras(), Valor.NO, "metrica-no",
+                        () -> pestanas.getSelectionModel().select(recomendaciones)),
+                tarjetaMetrica("Pendientes", conteos.pendientes(), Valor.DESCONOCIDO, "metrica-pendiente",
+                        () -> pestanas.getSelectionModel().select(pendientes)),
+                tarjetaMetrica("No aplican", conteos.noAplican(), Valor.NO_APLICA, "metrica-no-aplica", null));
+        Movimiento.escalonar(metricas.getChildren());
+
         var aviso = texto("Diagnóstico orientativo basado en tus respuestas.", "ayuda");
         aviso.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(aviso, Priority.ALWAYS);
         var pie = fila("pie-acciones", aviso);
-        for (var accion : java.util.List.of(boton("Volver al inicio", "enlace", inicio),
-                boton("Nueva evaluación", "enlace", nueva), boton("Editar respuestas", "secundario", editar))) {
+        for (var accion : java.util.List.of(boton("Volver al inicio", "mdi2h-home-outline", "enlace", inicio),
+                boton("Nueva evaluación", "mdi2p-plus-circle-outline", "enlace", nueva), boton("Editar respuestas", "mdi2p-pencil-outline", "secundario", editar))) {
             accion.setMinWidth(Region.USE_PREF_SIZE);
             pie.getChildren().add(accion);
         }
@@ -87,11 +108,12 @@ final class Resultados {
         vista = new BorderPane();
         vista.getStyleClass().add("vista-resultados");
         vista.heightProperty().addListener((obs, anterior, alto) -> {
-            boolean compacto = alto.doubleValue() < 470;
+            // Con la fila de métricas el encabezado ocupa más: se compacta en ventanas de menos de ~700 px.
+            boolean compacto = alto.doubleValue() < 700;
             vista.pseudoClassStateChanged(COMPACTO, compacto);
             etiquetaDiagnostico.setVisible(!compacto);
         });
-        vista.setTop(encabezado);
+        vista.setTop(caja(0, "zona-superior-resultados", encabezado, metricas));
         vista.setCenter(pestanas);
         vista.setBottom(caja(0, "pie-resultados", estadoExportacion, pie));
     }
@@ -108,6 +130,7 @@ final class Resultados {
         informe.recomendacionesPorPrioridad().forEach((prioridad, recomendaciones) -> {
             VBox grupo = grupo("Prioridad " + prioridad, recomendaciones.size());
             grupo.getStyleClass().add("grupo-recomendaciones");
+            var mosaico = new Mosaico();
             for (var recomendacion : recomendaciones) {
                 String id = recomendacion.criterio();
                 var accion = caja(4, "accion-recomendada",
@@ -115,8 +138,9 @@ final class Resultados {
                         texto(recomendacion.accion(), "texto"));
                 var ficha = caja(8, "ficha-recomendacion", texto(informe.criterio(id).titulo(), "subtitulo"), accion);
                 agregarUbicacion(ficha, id);
-                grupo.getChildren().add(ficha);
+                mosaico.agregar(ficha);
             }
+            grupo.getChildren().add(mosaico);
             panel.getChildren().add(grupo);
         });
         return panel;
@@ -131,7 +155,7 @@ final class Resultados {
             VBox grupo = grupo(estado, pendientes.size());
             for (var pendiente : pendientes) {
                 var criterio = informe.criterio(pendiente.criterio());
-                var enlace = boton("Ir al criterio", "enlace", () -> irAlCriterio.accept(criterio.id()));
+                var enlace = boton("Ir al criterio", "mdi2a-arrow-right", "enlace", () -> irAlCriterio.accept(criterio.id()));
                 enlace.setAccessibleText("Ir al criterio " + criterio.titulo());
                 var contenido = cajaCriterio(criterio.id(), criterio.pregunta());
                 HBox.setHgrow(contenido, Priority.ALWAYS);
@@ -177,6 +201,87 @@ final class Resultados {
         return panel;
     }
 
+    private static String claseEstado(String estado) {
+        return switch (estado) {
+            case "requiere_atencion_prioritaria" -> "estado-critico";
+            case "requiere_mejoras" -> "estado-mejoras";
+            case "sin_barreras_reportadas" -> "estado-ok";
+            default -> "estado-info";
+        };
+    }
+
+    /**
+     * Tarjeta con el conteo de un tipo de respuesta. Con {@code alPulsar} es un botón que lleva a su pestaña;
+     * sin él es solo informativa y no entra en el orden de tabulación.
+     */
+    private static Node tarjetaMetrica(String nombre, int cantidad, Valor valor, String estilo, Runnable alPulsar) {
+        var numero = new Label(String.valueOf(cantidad));
+        numero.getStyleClass().add("numero-metrica");
+        Movimiento.contar(numero, cantidad, actual -> numero.setText(String.valueOf(actual)));
+        // Rótulo sin ajuste de línea: con ajuste, dentro de un botón la altura de la tarjeta salía distinta.
+        var rotulo = new Label(nombre);
+        rotulo.getStyleClass().add("rotulo-metrica");
+        var textos = new VBox(0, numero, rotulo);
+        textos.setAlignment(Pos.CENTER_LEFT);
+        var contenido = new HBox(14, Iconos.icono(Iconos.codigoValor(valor), "icono-metrica"), textos);
+        contenido.setAlignment(Pos.CENTER_LEFT);
+        Node tarjeta;
+        if (alPulsar == null) {
+            contenido.getStyleClass().addAll("tarjeta-metrica", estilo);
+            tarjeta = contenido;
+        } else {
+            var boton = boton("", "tarjeta-metrica", alPulsar);
+            boton.getStyleClass().add(estilo);
+            boton.setGraphic(contenido);
+            boton.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+            boton.setAlignment(Pos.CENTER_LEFT);
+            boton.setAccessibleText(nombre + ": " + cantidad + ". Ver el detalle");
+            tarjeta = boton;
+        }
+        HBox.setHgrow(tarjeta, Priority.ALWAYS);
+        ((Region) tarjeta).setMaxWidth(Double.MAX_VALUE);
+        ((Region) tarjeta).setMinWidth(0);
+        ((Region) tarjeta).setPrefWidth(0);
+        return tarjeta;
+    }
+
+    /**
+     * Reparte las fichas en las columnas que caben (mínimo 380 px cada una). Usa un GridPane porque calcula la
+     * altura de cada fila con el ancho real de su columna; un TilePane la medía con otro ancho y cortaba el texto.
+     */
+    private static final class Mosaico extends GridPane {
+        private static final double ANCHO_MINIMO = 380;
+        private final List<Node> fichas = new ArrayList<>();
+        private int columnas;
+
+        Mosaico() {
+            getStyleClass().add("mosaico-recomendaciones");
+            setHgap(16);
+            setVgap(16);
+            widthProperty().addListener((obs, anterior, nuevo) ->
+                    organizar(Math.max(1, (int) ((nuevo.doubleValue() + getHgap()) / (ANCHO_MINIMO + getHgap())))));
+        }
+
+        void agregar(Node ficha) {
+            fichas.add(ficha);
+            organizar(Math.max(1, columnas));
+        }
+
+        private void organizar(int nuevasColumnas) {
+            columnas = nuevasColumnas;
+            getChildren().clear();
+            getColumnConstraints().clear();
+            for (int i = 0; i < columnas; i++) {
+                var columna = new ColumnConstraints();
+                columna.setPercentWidth(100.0 / columnas);
+                getColumnConstraints().add(columna);
+            }
+            for (int i = 0; i < fichas.size(); i++) {
+                add(fichas.get(i), i % columnas, i / columnas);
+            }
+        }
+    }
+
     private static VBox grupo(String nombre, int cantidad) {
         return caja(0, "grupo-informe", texto(nombre + " (" + cantidad + ")", "titulo-grupo"));
     }
@@ -212,14 +317,17 @@ final class Resultados {
         }
         String nombre = archivo.getName().toLowerCase(Locale.ROOT);
         if (!nombre.endsWith(".html") && !nombre.endsWith(".htm")) {
+            Sonidos.interfaz("error");
             informar("Usa la extensión .html para guardar el informe.", true);
             return;
         }
         try {
             ExportadorInformeHtml.guardar(informe, archivo.toPath());
+            Sonidos.interfaz("exportado");
             informar("Informe guardado. Puedes abrirlo en el navegador para imprimirlo.", false);
             estadoExportacion.setTooltip(new Tooltip(archivo.getAbsolutePath()));
         } catch (IOException | SecurityException e) {
+            Sonidos.interfaz("error");
             informar("No se pudo guardar el informe. Elige otra carpeta y vuelve a intentar.", true);
         }
     }
