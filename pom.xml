@@ -25,6 +25,11 @@
             <artifactId>javafx-fxml</artifactId>
             <version>${javafx.version}</version>
         </dependency>
+        <dependency>
+            <groupId>org.openjfx</groupId>
+            <artifactId>javafx-media</artifactId>
+            <version>${javafx.version}</version>
+        </dependency>
         <!-- 2.0.1 es la última versión compilada para Java 17 (la 2.1.0 exige 21 y la 3.0.0, 25). -->
         <dependency>
             <groupId>io.github.mkpaz</groupId>

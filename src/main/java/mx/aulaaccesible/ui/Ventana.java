@@ -48,10 +48,13 @@ public final class Ventana {
     @FXML private VBox zonaEstado;
     @FXML private Button botonTema;
     @FXML private Button botonMovimiento;
+    @FXML private Button botonSonido;
     @FXML private FontIcon iconoTema;
     @FXML private FontIcon iconoMovimiento;
+    @FXML private FontIcon iconoSonido;
     @FXML private Tooltip ayudaTema;
     @FXML private Tooltip ayudaMovimiento;
+    @FXML private Tooltip ayudaSonido;
 
     private ServicioEvaluacion servicio;
     private List<Criterio> catalogo = List.of();
@@ -69,8 +72,10 @@ public final class Ventana {
     private void initialize() {
         Preferencias.temaOscuro().addListener((obs, anterior, oscuro) -> actualizarBotonTema());
         Preferencias.reducirMovimiento().addListener((obs, anterior, reducido) -> actualizarBotonMovimiento());
+        Preferencias.sonidos().addListener((obs, anterior, activos) -> actualizarBotonSonido());
         actualizarBotonTema();
         actualizarBotonMovimiento();
+        actualizarBotonSonido();
         inicio(false);
         conectar();
     }
@@ -83,6 +88,11 @@ public final class Ventana {
     @FXML
     private void alternarMovimiento() {
         Preferencias.reducirMovimiento().set(!Preferencias.reducirMovimiento().get());
+    }
+
+    @FXML
+    private void alternarSonido() {
+        Preferencias.sonidos().set(!Preferencias.sonidos().get());
     }
 
     /** El icono muestra a qué tema se pasa al pulsar, y el nombre accesible lo dice con palabras. */
@@ -100,6 +110,15 @@ public final class Ventana {
         iconoMovimiento.setIconLiteral(reducido ? "mdi2m-motion-pause-outline" : "mdi2m-motion-play-outline");
         ayudaMovimiento.setText(nombre);
         botonMovimiento.setAccessibleText(nombre);
+    }
+
+    /** El icono muestra el estado actual (con o sin sonido) y el nombre accesible, la acción del botón. */
+    private void actualizarBotonSonido() {
+        boolean activos = Preferencias.sonidos().get();
+        String nombre = activos ? "Silenciar sonidos" : "Activar sonidos";
+        iconoSonido.setIconLiteral(activos ? "mdi2v-volume-high" : "mdi2v-volume-off");
+        ayudaSonido.setText(nombre);
+        botonSonido.setAccessibleText(nombre);
     }
 
     private void conectar() {
@@ -304,6 +323,7 @@ public final class Ventana {
                     () -> mostrarCuestionario(seccion, indiceCriterio), () -> nueva("", ""), () -> inicio(true));
             cambiarPantalla(vista.vista(), pasoResultados);
             vista.enfocarTitulo();
+            Sonidos.interfaz("diagnostico");
         });
     }
 

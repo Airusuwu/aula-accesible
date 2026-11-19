@@ -317,14 +317,17 @@ final class Resultados {
         }
         String nombre = archivo.getName().toLowerCase(Locale.ROOT);
         if (!nombre.endsWith(".html") && !nombre.endsWith(".htm")) {
+            Sonidos.interfaz("error");
             informar("Usa la extensión .html para guardar el informe.", true);
             return;
         }
         try {
             ExportadorInformeHtml.guardar(informe, archivo.toPath());
+            Sonidos.interfaz("exportado");
             informar("Informe guardado. Puedes abrirlo en el navegador para imprimirlo.", false);
             estadoExportacion.setTooltip(new Tooltip(archivo.getAbsolutePath()));
         } catch (IOException | SecurityException e) {
+            Sonidos.interfaz("error");
             informar("No se pudo guardar el informe. Elige otra carpeta y vuelve a intentar.", true);
         }
     }

@@ -387,7 +387,7 @@
 .condicion-guia { -fx-padding: 8 0 0 0; -fx-border-color: -aula-linea transparent transparent transparent; }
 .subtitulo-guia { -fx-font-size: 18px; -fx-font-weight: bold; -fx-padding: 4 0 0 0; }
 
-/* Ejemplos «Así se cumple» / «Así no se cumple» de la guía. Las demos son ilustraciones: no reciben foco. */
+/* Ejemplos «Así se cumple» / «Así no se cumple» de la guía: fichas con una demo interactiva (clase Ejemplo). */
 .ficha-ejemplo {
     -fx-padding: 12;
     -fx-background-color: -aula-fondo;
@@ -407,11 +407,22 @@
     -fx-border-color: -aula-linea;
     -fx-border-radius: 8;
 }
-.demo-texto, .demo-etiqueta, .demo-esquema, .demo-opcion { -fx-font-size: 14px; -fx-text-fill: -aula-tinta; }
+/* Caja de pruebas: el ejemplo activo se rodea con el acento y Tab/flechas se quedan dentro de él. */
+.ejemplo { -fx-spacing: 8; }
+.ejemplo-activo > .muestra-demo { -fx-border-color: -aula-accion; -fx-border-width: 2; -fx-padding: 11; }
+.instruccion-ejemplo { -fx-font-size: 14px; -fx-text-fill: -aula-secundario; }
+
+.demo-texto, .demo-etiqueta, .demo-esquema, .demo-opcion, .demo-ok-texto { -fx-font-size: 14px; -fx-text-fill: -aula-tinta; }
 .demo-etiqueta { -fx-font-weight: bold; }
 .demo-tenue { -fx-font-size: 14px; -fx-text-fill: -aula-demo-tenue; }
-.demo-marcador { -fx-text-fill: -aula-secundario; }
-.demo-grande { -fx-font-size: 20px; -fx-text-fill: -aula-tinta; }
+.demo-error-texto { -fx-font-size: 14px; -fx-text-fill: -aula-error; }
+.icono-demo { -fx-icon-color: -aula-tinta; -fx-icon-size: 18; }
+.icono-demo-ok { -fx-icon-color: -aula-accion; -fx-icon-size: 18; }
+.icono-demo-error { -fx-icon-color: -aula-error; -fx-icon-size: 18; }
+.icono-demo-grande { -fx-icon-color: -aula-accion; -fx-icon-size: 32; }
+.icono-demo-video { -fx-icon-color: -aula-activo; -fx-icon-size: 40; }
+
+/* Controles reales dentro de los ejemplos: el foco visible viene de la regla general de los botones y campos. */
 .demo-boton {
     -fx-font-size: 14px;
     -fx-text-fill: -aula-tinta;
@@ -421,40 +432,15 @@
     -fx-border-color: -aula-control;
     -fx-border-radius: 8;
 }
-.demo-boton.demo-foco { -fx-padding: 4 10; -fx-border-color: -aula-accion; -fx-border-width: 3; }
-.demo-campo {
-    -fx-font-size: 14px;
-    -fx-padding: 6 10;
-    -fx-background-color: -aula-fondo;
-    -fx-background-radius: 8;
-    -fx-border-color: -aula-control;
-    -fx-border-radius: 8;
-}
-.demo-campo.demo-error { -fx-border-color: -aula-error; -fx-border-width: 2; -fx-padding: 5 9; }
-.demo-error-texto { -fx-font-size: 14px; -fx-text-fill: -aula-error; }
-.icono-demo { -fx-icon-color: -aula-tinta; -fx-icon-size: 18; }
-.icono-demo-error { -fx-icon-color: -aula-error; -fx-icon-size: 18; }
-.icono-demo-video { -fx-icon-color: -aula-activo; -fx-icon-size: 36; }
-.demo-numero {
-    -fx-font-size: 14px;
-    -fx-font-weight: bold;
-    -fx-min-width: 26px;
-    -fx-alignment: center;
-    -fx-padding: 2 0;
-    -fx-text-fill: -aula-sobre-accion;
-    -fx-background-color: -aula-accion;
-    -fx-background-radius: 13;
-}
-.demo-dialogo {
-    -fx-padding: 10;
-    -fx-background-color: -aula-superficie;
-    -fx-background-radius: 8;
-    -fx-border-color: -aula-control;
-    -fx-border-radius: 8;
-}
-.demo-imagen { -fx-padding: 10; -fx-background-color: -aula-accion-suave; -fx-background-radius: 8; }
-.demo-video { -fx-min-height: 72px; -fx-background-color: -aula-bosque; -fx-background-radius: 8; }
-.demo-subtitulo {
+.demo-boton:selected { -fx-background-color: -aula-accion; -fx-text-fill: -aula-sobre-accion; }
+.demo-entrada { -fx-font-size: 14px; }
+.demo-entrada.demo-error { -fx-border-color: -aula-error; -fx-border-width: 2; }
+.demo-entrada.demo-valido { -fx-border-color: -aula-accion; -fx-border-width: 2; }
+/* «Así no se cumple» de foco_visible: el foco se mueve pero no se ve. */
+.demo-sin-foco .button:focused { -fx-border-color: -aula-control; -fx-border-width: 1; -fx-border-radius: 8; -fx-border-insets: 0; }
+
+.demo-video { -fx-min-height: 96px; -fx-background-color: -aula-bosque; -fx-background-radius: 8; }
+.demo-subtitulo, .demo-transcripcion {
     -fx-font-size: 14px;
     -fx-text-fill: -aula-tinta;
     -fx-padding: 6 10;
@@ -463,18 +449,41 @@
     -fx-border-color: -aula-linea;
     -fx-border-radius: 8;
 }
-.demo-audio {
+.demo-audio, .demo-carrusel {
     -fx-padding: 8 10;
+    -fx-min-height: 56px;
     -fx-background-color: -aula-superficie;
     -fx-background-radius: 8;
     -fx-border-color: -aula-linea;
     -fx-border-radius: 8;
 }
+.demo-barra { -fx-min-height: 16px; -fx-pref-height: 16px; -fx-background-color: -aula-accion; -fx-background-radius: 4; }
+
 .demo-enlace { -fx-font-size: 14px; -fx-text-fill: -aula-accion; -fx-underline: true; }
 .demo-nivel-0 { -fx-font-size: 16px; -fx-font-weight: bold; }
 .demo-nivel-1 { -fx-font-weight: bold; }
+.lista-lector { -fx-padding: 4; -fx-background-radius: 8; -fx-border-color: -aula-linea; -fx-border-radius: 8; }
+.lista-lector:focused { -fx-border-color: -aula-accion; -fx-border-width: 2; -fx-padding: 3; }
+.demo-actual { -fx-background-color: -aula-accion-suave; -fx-background-radius: 6; }
+.demo-tarjeta {
+    -fx-padding: 8 10;
+    -fx-font-size: 14px;
+    -fx-text-fill: -aula-tinta;
+    -fx-background-color: -aula-superficie;
+    -fx-background-radius: 8;
+    -fx-border-color: -aula-control;
+    -fx-border-radius: 8;
+}
+.demo-tarjeta.demo-actual { -fx-background-color: -aula-accion-suave; -fx-border-color: -aula-accion; }
 .demo-menu { -fx-padding: 4; -fx-background-color: -aula-superficie; -fx-background-radius: 8; }
 .demo-opcion { -fx-padding: 4 10; -fx-background-color: -aula-accion-suave; -fx-background-radius: 8; }
+.demo-menu-abierto {
+    -fx-padding: 6;
+    -fx-background-color: -aula-superficie;
+    -fx-background-radius: 8;
+    -fx-border-color: -aula-control;
+    -fx-border-radius: 8;
+}
 .demo-marco-estrecho {
     -fx-padding: 8;
     -fx-background-color: -aula-superficie;

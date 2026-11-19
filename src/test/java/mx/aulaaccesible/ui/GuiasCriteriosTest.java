@@ -35,6 +35,16 @@ class GuiasCriteriosTest {
     }
 
     @Test
+    void cadaCriterioTieneEjemploInteractivoQueCumpleYQueNoCumple() {
+        for (Criterio criterio : catalogo) {
+            var muestra = MuestrasCriterios.para(criterio.id());
+            assertNotNull(muestra, "Falta el ejemplo interactivo de " + criterio.id());
+            assertNotNull(muestra.cumple(), "Falta «Así se cumple» en " + criterio.id());
+            assertNotNull(muestra.noCumple(), "Falta «Así no se cumple» en " + criterio.id());
+        }
+    }
+
+    @Test
     void guiasYDemosSoloReferencianCriteriosDelCatalogo() {
         Set<String> ids = catalogo.stream().map(Criterio::id).collect(Collectors.toSet());
         assertTrue(ids.containsAll(GuiasCriterios.ids()), "Hay guías de criterios inexistentes");

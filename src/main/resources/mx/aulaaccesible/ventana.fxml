@@ -42,6 +42,10 @@
             </HBox>
             <Region styleClass="separador-barra" prefWidth="1" minWidth="1" maxWidth="1" prefHeight="24" />
             <HBox spacing="4" alignment="CENTER_RIGHT">
+                <Button fx:id="botonSonido" styleClass="boton-icono" onAction="#alternarSonido">
+                    <graphic><FontIcon fx:id="iconoSonido" iconLiteral="mdi2v-volume-high" styleClass="icono-boton" /></graphic>
+                    <tooltip><Tooltip fx:id="ayudaSonido" text="Silenciar sonidos" /></tooltip>
+                </Button>
                 <Button fx:id="botonMovimiento" styleClass="boton-icono" onAction="#alternarMovimiento">
                     <graphic><FontIcon fx:id="iconoMovimiento" iconLiteral="mdi2m-motion-play-outline" styleClass="icono-boton" /></graphic>
                     <tooltip><Tooltip fx:id="ayudaMovimiento" text="Reducir movimiento" /></tooltip>

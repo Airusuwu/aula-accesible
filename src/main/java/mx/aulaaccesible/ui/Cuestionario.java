@@ -218,6 +218,14 @@ final class Cuestionario {
             }
             guardar.run();
             barra.respondido(indiceSeccion, indicePregunta, true);
+            if (elegido != null) {
+                // Un sonido distinto cuando esta respuesta termina de completar el área.
+                boolean completaArea = anterior == null && seccion.stream().allMatch(c -> {
+                    var respuesta = evaluacion.respuesta(c.id());
+                    return respuesta != null && respuesta.valor() != null;
+                });
+                Sonidos.interfaz(completaArea ? "area-completa" : "respuesta");
+            }
         });
         ubicacion.textProperty().addListener((obs, anterior, valor) -> {
             anotacion.setText(valor.isBlank() ? "Añadir ubicación" : "Ubicación anotada");
@@ -294,7 +302,7 @@ final class Cuestionario {
     }
 
     /** Ficha «Así se cumple» o «Así no se cumple»: la forma del icono (✓ o ✗) distingue, no solo el color. */
-    private static VBox fichaEjemplo(boolean cumple, String descripcion, Supplier<Node> demo) {
+    private static VBox fichaEjemplo(boolean cumple, String descripcion, Supplier<Demo> demo) {
         var estado = cumple ? "estado-si" : "estado-no";
         var marca = new HBox(Iconos.valor(cumple ? Valor.SI : Valor.NO));
         marca.getStyleClass().addAll("marca-estado", estado);
@@ -304,7 +312,8 @@ final class Cuestionario {
         var ficha = caja(8, "ficha-ejemplo", encabezado);
         ficha.getStyleClass().add(estado);
         if (demo != null) {
-            ficha.getChildren().add(demo.get());
+            // El ejemplo es interactivo: Tab y las flechas solo funcionan dentro de él al activarlo.
+            ficha.getChildren().add(Ejemplo.envolver(demo.get()));
         }
         ficha.getChildren().add(texto(descripcion, "texto-ejemplo"));
         return ficha;
@@ -387,6 +396,7 @@ final class Cuestionario {
     }
 
     void mostrarErrorMotivo() {
+        Sonidos.interfaz("error");
         errorMotivo.setVisible(true);
         motivo.setAccessibleHelp(errorMotivo.getText());
         Platform.runLater(() -> {

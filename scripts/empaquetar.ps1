@@ -34,7 +34,7 @@ try {
     New-Item -ItemType Directory -Path $fx, $destino -Force | Out-Null
     Copy-Item -LiteralPath (Join-Path $proyecto "target/aula-accesible-$version.jar") -Destination $entrada
     $libs = Join-Path $proyecto 'target/dependency'
-    foreach ($modulo in @('base', 'graphics', 'controls', 'fxml')) {
+    foreach ($modulo in @('base', 'graphics', 'controls', 'fxml', 'media')) {
         $plataforma = @(Get-ChildItem -LiteralPath $libs -Filter "javafx-$modulo-*-win.jar")
         if ($plataforma.Count -ne 1) { throw "Falta el modulo JavaFX para Windows x64: $modulo" }
         Copy-Item -LiteralPath $plataforma[0].FullName -Destination $fx
@@ -50,7 +50,7 @@ try {
         '--dest', $destino, '--input', $entrada, '--main-jar', "aula-accesible-$version.jar",
         '--main-class', 'mx.aulaaccesible.Lanzador', '--add-modules',
         'java.desktop,java.xml,java.logging,java.scripting,jdk.unsupported,jdk.crypto.ec',
-        '--java-options', '--module-path=$APPDIR/fx', '--java-options', '--add-modules=javafx.controls,javafx.fxml')
+        '--java-options', '--module-path=$APPDIR/fx', '--java-options', '--add-modules=javafx.controls,javafx.fxml,javafx.media')
     & $jpackage @opciones
     if ($LASTEXITCODE -ne 0) { throw 'jpackage no pudo generar el lanzador.' }
 

@@ -1,0 +1,31 @@
+[
+  {"id": "respuesta", "tipo": "efecto", "texto": "A soft, very short user interface click, gentle wooden tick, clean and quiet", "duracion": 0.5},
+  {"id": "area-completa", "tipo": "efecto", "texto": "A short bright chime of two rising notes, soft glockenspiel, pleasant and quiet", "duracion": 1.5},
+  {"id": "diagnostico", "tipo": "efecto", "texto": "A short pleasant success chord, soft warm synth pad, uplifting and calm", "duracion": 2},
+  {"id": "exportado", "tipo": "efecto", "texto": "A quick paper swoosh followed by a soft confirmation ding, clean and quiet", "duracion": 1.5},
+  {"id": "error", "tipo": "efecto", "texto": "A gentle low soft error tone of two short descending notes, not harsh, quiet", "duracion": 1},
+  {"id": "ejemplo-entrar", "tipo": "efecto", "texto": "A soft short rising whoosh, airy and quiet", "duracion": 0.6},
+  {"id": "ejemplo-salir", "tipo": "efecto", "texto": "A soft short falling whoosh, airy and quiet", "duracion": 0.6},
+  {"id": "demo-musica", "tipo": "efecto", "texto": "Gentle cheerful instrumental background music for an educational app, light piano and xylophone, calm tempo, loopable", "duracion": 10, "bucle": true},
+  {"id": "demo-tiempo-agotado", "tipo": "efecto", "texto": "A soft time-up alarm of three short gentle beeps", "duracion": 2},
+
+  {"id": "leccion-1", "tipo": "voz", "texto": "Hoy veremos las fracciones."},
+  {"id": "leccion-2", "tipo": "voz", "texto": "Una fracción representa una parte de un todo."},
+  {"id": "leccion-3", "tipo": "voz", "texto": "Si una pizza se corta en cuatro partes iguales y comes una, comiste un cuarto."},
+
+  {"id": "agua-1", "tipo": "voz", "texto": "El sol calienta el mar y el agua sube al cielo en forma de vapor."},
+  {"id": "agua-2", "tipo": "voz", "texto": "El vapor se enfría y forma las nubes."},
+  {"id": "agua-3", "tipo": "voz", "texto": "Las nubes sueltan gotas y llueve sobre las montañas."},
+  {"id": "agua-4", "tipo": "voz", "texto": "El agua baja por los ríos y regresa al mar."},
+
+  {"id": "vago-1", "tipo": "voz", "texto": "Miren esto."},
+  {"id": "vago-2", "tipo": "voz", "texto": "Y luego pasa esto otro."},
+  {"id": "vago-3", "tipo": "voz", "texto": "Aquí sucede lo importante."},
+  {"id": "vago-4", "tipo": "voz", "texto": "Y así termina."},
+
+  {"id": "alt-bueno", "tipo": "voz", "texto": "Gráfica de barras: el sesenta por ciento del grupo aprobó el examen y el cuarenta por ciento no."},
+  {"id": "alt-malo", "tipo": "voz", "texto": "imagen uno punto png"},
+
+  {"id": "lector-etiqueta-si", "tipo": "voz", "texto": "Correo electrónico, campo de texto."},
+  {"id": "lector-etiqueta-no", "tipo": "voz", "texto": "Campo de texto."}
+]

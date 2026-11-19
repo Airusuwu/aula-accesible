@@ -136,6 +136,45 @@ final class Movimiento {
         cuenta.play();
     }
 
+    /**
+     * Cambio de escena dentro de un ejemplo: el contenido se desvanece, {@code cambio} lo sustituye y vuelve a
+     * aparecer (100 ms + 100 ms). Con «Reducir movimiento» el contenido cambia sin transición.
+     */
+    static void cambiarEscena(Node nodo, Runnable cambio) {
+        if (reducido() || nodo.getScene() == null) {
+            cambio.run();
+            return;
+        }
+        var sale = new FadeTransition(Duration.millis(100), nodo);
+        sale.setToValue(0);
+        sale.setOnFinished(evento -> {
+            cambio.run();
+            var entra = new FadeTransition(Duration.millis(100), nodo);
+            entra.setToValue(1);
+            entra.setOnFinished(fin -> nodo.setOpacity(1));
+            entra.play();
+        });
+        sale.play();
+    }
+
+    /**
+     * Reloj que repite {@code tic} cada {@code segundos} hasta que se detenga (cuenta regresiva, carrusel). No es
+     * una animación visual, así que no depende de «Reducir movimiento»: es justo el contenido que se evalúa.
+     * Quien lo crea debe llamar a {@code play()} y a {@code stop()}.
+     */
+    static Timeline reloj(double segundos, Runnable tic) {
+        var reloj = new Timeline(new KeyFrame(Duration.seconds(segundos), evento -> tic.run()));
+        reloj.setCycleCount(Timeline.INDEFINITE);
+        return reloj;
+    }
+
+    /** Espera {@code segundos} y ejecuta {@code alTerminar}. Quien la crea debe llamar a {@code play()}. */
+    static PauseTransition esperar(double segundos, Runnable alTerminar) {
+        var pausa = new PauseTransition(Duration.seconds(segundos));
+        pausa.setOnFinished(evento -> alTerminar.run());
+        return pausa;
+    }
+
     /** Hace que un control se hunda un poco mientras se presiona. */
     static void presionable(Node nodo) {
         nodo.addEventHandler(MouseEvent.MOUSE_PRESSED, evento -> escalar(nodo, 0.97));

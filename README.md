@@ -27,7 +27,9 @@ El Maven Wrapper descarga Maven y resuelve JavaFX y las demás dependencias en l
 
 El caso está incluido en la base de conocimientos y se carga desde Prolog.
 
-En el cuestionario, abre **Cómo evaluar este criterio** si necesitas pasos para comprobarlo y saber cuándo marcar «Sí». La ayuda comienza cerrada en cada pregunta.
+En el cuestionario, abre **Cómo evaluar este criterio** si necesitas pasos para comprobarlo y saber cuándo marcar «Sí». La ayuda comienza cerrada en cada pregunta. Incluye ejemplos de **Así se cumple** y **Así no se cumple** que puedes probar: pulsa **Probar ejemplo** y usa Tab, las flechas o el ratón dentro del ejemplo; con Esc o **Salir del ejemplo** vuelves a la interfaz.
+
+La aplicación emite sonidos breves al responder, completar un área, ver el diagnóstico, exportar y ante errores. Puedes silenciarlos con el botón de sonido de la barra superior; nunca son la única señal de lo que ocurre.
 
 Para conservar el diagnóstico, pulsa **Exportar informe** y elige dónde guardar el HTML. Puedes abrirlo sin conexión en un navegador e imprimirlo como cualquier página.
 
@@ -36,6 +38,7 @@ Para conservar el diagnóstico, pulsa **Exportar informe** y elige dónde guarda
 - `src/` contiene la interfaz JavaFX, el modelo de respuestas y la conexión con Prolog.
 - `conocimientos/aula_accesible.pl` contiene los criterios, las reglas y el ejemplo. `conocimientos/puente.pl` recibe las solicitudes de Java en JSON y devuelve el diagnóstico.
 - `scripts/` incluye las tareas de compilación, pruebas y empaquetado para Windows.
+- `src/main/resources/mx/aulaaccesible/sonidos/` contiene los audios de la interfaz y de los ejemplos, ya generados. Para regenerarlos o añadir otros, define `ELEVENLABS_API_KEY` (en el entorno o en un archivo `.env` en la raíz, que Git ignora) y ejecuta `scripts/generar-sonidos.ps1`; solo se necesita para esto, no para usar la aplicación.
 
 Para ejecutar las pruebas de Prolog y las de integración con Java, conserva las variables de la sección anterior y usa:
 
