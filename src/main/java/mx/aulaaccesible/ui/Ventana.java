@@ -42,9 +42,9 @@ import static mx.aulaaccesible.ui.Controles.*;
 
 public final class Ventana {
     @FXML private BorderPane pantalla;
-    @FXML private Label pasoInicio;
-    @FXML private Label pasoCuestionario;
-    @FXML private Label pasoResultados;
+    @FXML private Button pasoInicio;
+    @FXML private Button pasoCuestionario;
+    @FXML private Button pasoResultados;
     @FXML private VBox zonaEstado;
     @FXML private Button botonTema;
     @FXML private Button botonMovimiento;
@@ -67,6 +67,10 @@ public final class Ventana {
     private String borradorSoftware = "";
     private String borradorSeccion = "";
     private boolean conexionFallida;
+    /** Paso de la barra cuya pantalla se está mostrando. */
+    private Button pasoVisible;
+    /** Hay una consulta a Prolog en curso: los pasos no se pueden usar hasta que termine. */
+    private boolean cargando;
 
     @FXML
     private void initialize() {
@@ -88,6 +92,29 @@ public final class Ventana {
     @FXML
     private void alternarMovimiento() {
         Preferencias.reducirMovimiento().set(!Preferencias.reducirMovimiento().get());
+    }
+
+    /** Los pasos de la barra llevan a su pantalla; el que ya se está mostrando no hace nada. */
+    @FXML
+    private void irAInicio() {
+        if (pasoVisible != pasoInicio) {
+            inicio(true);
+        }
+    }
+
+    @FXML
+    private void irACuestionario() {
+        if (pasoVisible != pasoCuestionario && evaluacion != null) {
+            mostrarCuestionario(seccion, indiceCriterio);
+        }
+    }
+
+    /** Igual que «Ver diagnóstico parcial»: valida los «No aplica» y pide el diagnóstico a Prolog. */
+    @FXML
+    private void irAResultados() {
+        if (pasoVisible != pasoResultados && evaluacion != null) {
+            diagnosticar();
+        }
     }
 
     @FXML
@@ -327,15 +354,31 @@ public final class Ventana {
         });
     }
 
-    private void cambiarPantalla(Node contenido, Label pasoActual) {
+    private void cambiarPantalla(Node contenido, Button pasoActual) {
         zonaEstado.getChildren().clear();
         pantalla.setCenter(contenido);
         Movimiento.entrar(contenido);
-        for (Label paso : List.of(pasoInicio, pasoCuestionario, pasoResultados)) {
-            paso.getParent().getStyleClass().remove("paso-activo");
-            paso.setAccessibleText(paso.getText() + (paso == pasoActual ? ", actual" : ""));
+        pasoVisible = pasoActual;
+        actualizarPasos();
+    }
+
+    /**
+     * Estado de los pasos de la barra: el actual lleva la marca y se anuncia como «paso actual»; Cuestionario y
+     * Resultados no están disponibles hasta que haya una evaluación; y ninguno se puede usar mientras Prolog trabaja.
+     */
+    private void actualizarPasos() {
+        boolean hayEvaluacion = evaluacion != null;
+        for (Button paso : List.of(pasoInicio, pasoCuestionario, pasoResultados)) {
+            boolean actual = paso == pasoVisible;
+            boolean disponible = paso == pasoInicio || hayEvaluacion;
+            paso.setDisable(cargando || !disponible);
+            paso.getStyleClass().remove("paso-activo");
+            if (actual) {
+                paso.getStyleClass().add("paso-activo");
+            }
+            paso.setAccessibleText(paso.getText()
+                    + (actual ? ", paso actual" : disponible ? "" : ", no disponible hasta iniciar una evaluación"));
         }
-        pasoActual.getParent().getStyleClass().add("paso-activo");
     }
 
     private void mensaje(String contenido, String estilo) {
@@ -356,6 +399,8 @@ public final class Ventana {
         var carga = new ProgressIndicator();
         carga.setPrefSize(20, 20);
         pantalla.setDisable(true);
+        cargando = true;
+        actualizarPasos();
         var zonaCarga = fila("zona-carga", carga, texto(mensaje, "texto"));
         zonaEstado.getChildren().setAll(zonaCarga);
         Movimiento.entrar(zonaCarga);
@@ -364,11 +409,15 @@ public final class Ventana {
         };
         tarea.setOnSucceeded(evento -> {
             pantalla.setDisable(false);
+            cargando = false;
+            actualizarPasos();
             zonaEstado.getChildren().clear();
             completar.accept(tarea.getValue());
         });
         tarea.setOnFailed(evento -> {
             pantalla.setDisable(false);
+            cargando = false;
+            actualizarPasos();
             var error = tarea.getException();
             System.err.println(error.getMessage());
             zonaEstado.getChildren().clear();

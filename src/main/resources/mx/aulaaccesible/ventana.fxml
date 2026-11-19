@@ -26,19 +26,18 @@
                 </viewport>
             </ImageView>
             <Region HBox.hgrow="ALWAYS" />
+            <!-- Los pasos son botones: llevan a su pantalla. Ventana.actualizarPasos fija cuál es el actual y cuáles
+                 no están disponibles todavía (Cuestionario y Resultados necesitan una evaluación). -->
             <HBox styleClass="indicador-pasos" spacing="12" alignment="CENTER_RIGHT">
-                <HBox styleClass="indicador-paso" alignment="CENTER" spacing="8">
-                    <FontIcon iconLiteral="mdi2h-home-outline" styleClass="icono-paso" mouseTransparent="true" />
-                    <Label fx:id="pasoInicio" text="Inicio" styleClass="paso" />
-                </HBox>
-                <HBox styleClass="indicador-paso" alignment="CENTER" spacing="8">
-                    <FontIcon iconLiteral="mdi2c-clipboard-list-outline" styleClass="icono-paso" mouseTransparent="true" />
-                    <Label fx:id="pasoCuestionario" text="Cuestionario" styleClass="paso" />
-                </HBox>
-                <HBox styleClass="indicador-paso" alignment="CENTER" spacing="8">
-                    <FontIcon iconLiteral="mdi2c-chart-bar" styleClass="icono-paso" mouseTransparent="true" />
-                    <Label fx:id="pasoResultados" text="Resultados" styleClass="paso" />
-                </HBox>
+                <Button fx:id="pasoInicio" text="Inicio" styleClass="indicador-paso" onAction="#irAInicio">
+                    <graphic><FontIcon iconLiteral="mdi2h-home-outline" styleClass="icono-paso" /></graphic>
+                </Button>
+                <Button fx:id="pasoCuestionario" text="Cuestionario" styleClass="indicador-paso" onAction="#irACuestionario">
+                    <graphic><FontIcon iconLiteral="mdi2c-clipboard-list-outline" styleClass="icono-paso" /></graphic>
+                </Button>
+                <Button fx:id="pasoResultados" text="Resultados" styleClass="indicador-paso" onAction="#irAResultados">
+                    <graphic><FontIcon iconLiteral="mdi2c-chart-bar" styleClass="icono-paso" /></graphic>
+                </Button>
             </HBox>
             <Region styleClass="separador-barra" prefWidth="1" minWidth="1" maxWidth="1" prefHeight="24" />
             <HBox spacing="4" alignment="CENTER_RIGHT">

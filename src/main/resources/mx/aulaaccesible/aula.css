@@ -86,12 +86,33 @@
     -fx-padding: 8 24;
     -fx-effect: dropshadow(gaussian, -aula-sombra, 8, 0, 0, 2);
 }
-.indicador-paso { -fx-padding: 6 4; -fx-border-width: 0 0 3 0; -fx-border-color: transparent; }
-.indicador-paso.paso-activo { -fx-border-color: transparent transparent -aula-activo transparent; }
-.paso { -fx-text-fill: white; -fx-font-size: 16px; }
-.paso-activo .paso { -fx-font-weight: bold; }
+/* Pasos de la barra: botones que llevan a su pantalla. El actual lleva subrayado y negrita. */
+.indicador-paso.button {
+    -fx-background-color: transparent;
+    -fx-background-insets: 0;
+    -fx-background-radius: 8 8 0 0;
+    -fx-border-color: transparent;
+    -fx-border-width: 0 0 3 0;
+    -fx-border-radius: 0;
+    -fx-border-insets: 0;
+    -fx-padding: 6 10;
+    -fx-min-height: 40px;
+    -fx-text-fill: white;
+    -fx-font-size: 16px;
+    -fx-graphic-text-gap: 8;
+}
+.indicador-paso.button:hover { -fx-background-color: rgba(255, 255, 255, 0.14); }
+.indicador-paso.paso-activo.button { -fx-border-color: transparent transparent -aula-activo transparent; -fx-font-weight: bold; }
+.indicador-paso.button:disabled { -fx-opacity: 0.55; }
 .icono-paso { -fx-icon-color: white; -fx-icon-size: 20; }
 .paso-activo .icono-paso { -fx-icon-color: -aula-activo; }
+/* En la barra oscura el foco usa el verde claro (en el tema claro el acento no contrasta con el fondo). */
+.barra-superior .button:focused {
+    -fx-border-color: -aula-activo;
+    -fx-border-width: 2;
+    -fx-border-radius: 8;
+    -fx-border-insets: 0;
+}
 .separador-barra { -fx-background-color: rgba(255, 255, 255, 0.25); }
 
 .boton-icono.button {
