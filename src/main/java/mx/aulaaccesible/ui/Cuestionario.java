@@ -3,6 +3,7 @@ package mx.aulaaccesible.ui;
 import javafx.application.Platform;
 import javafx.css.PseudoClass;
 import javafx.geometry.Pos;
+import javafx.scene.Node;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.ContentDisplay;
 import javafx.scene.control.Label;
@@ -11,7 +12,9 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.FlowPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
@@ -21,6 +24,7 @@ import mx.aulaaccesible.model.Valor;
 
 import java.util.List;
 import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 import static mx.aulaaccesible.ui.Controles.*;
 
@@ -34,6 +38,8 @@ final class Cuestionario {
     /** Ancho de ventana desde el que la guía se muestra como panel lateral en vez de plegable. */
     private static final double ANCHO_PANEL_GUIA = 1360;
     private static final double ANCHO_OPCION = 192;
+    /** Ancho de la guía plegable desde el que las dos fichas del ejemplo van lado a lado. */
+    private static final double ANCHO_DOS_COLUMNAS = 640;
 
     private final Evaluacion evaluacion;
     private final List<List<Criterio>> secciones;
@@ -264,19 +270,70 @@ final class Cuestionario {
         if (guia == null) {
             return;
         }
-        contenidoGuia = contenidoDeGuia(guia);
-        guiaPlegable = desplegable("Cómo evaluar este criterio", contenidoDeGuia(guia));
+        contenidoGuia = contenidoDeGuia(criterio.id(), guia, false);
+        guiaPlegable = desplegable("Cómo evaluar este criterio", contenidoDeGuia(criterio.id(), guia, true));
         guiaPlegable.getStyleClass().add("guia-criterio");
     }
 
-    private static VBox contenidoDeGuia(GuiasCriterios.Guia guia) {
+    /**
+     * Pasos, ejemplo y condición para marcar «Sí». En el panel lateral las fichas del ejemplo van apiladas; en el
+     * plegable, que ocupa todo el ancho de la tarjeta, se reparten en dos columnas si caben.
+     */
+    private static VBox contenidoDeGuia(String id, GuiasCriterios.Guia guia, boolean plegable) {
         var pasos = caja(4, "pasos-guia");
         for (int i = 0; i < guia.pasos().size(); i++) {
             pasos.getChildren().add(texto((i + 1) + ". " + guia.pasos().get(i), "paso-guia"));
         }
+        var muestra = MuestrasCriterios.para(id);
+        var cumple = fichaEjemplo(true, guia.cumple(), muestra == null ? null : muestra.cumple());
+        var noCumple = fichaEjemplo(false, guia.noCumple(), muestra == null ? null : muestra.noCumple());
+        Node fichas = plegable ? fichasEnColumnas(cumple, noCumple) : caja(12, "fichas-ejemplo", cumple, noCumple);
         var condicion = texto("Marca Sí " + guia.condicion(), "condicion-guia");
         condicion.setMaxWidth(Double.MAX_VALUE);
-        return caja(12, "contenido-guia", pasos, condicion);
+        return caja(12, "contenido-guia", pasos, texto("Ejemplo", "subtitulo-guia"), fichas, condicion);
+    }
+
+    /** Ficha «Así se cumple» o «Así no se cumple»: la forma del icono (✓ o ✗) distingue, no solo el color. */
+    private static VBox fichaEjemplo(boolean cumple, String descripcion, Supplier<Node> demo) {
+        var estado = cumple ? "estado-si" : "estado-no";
+        var marca = new HBox(Iconos.valor(cumple ? Valor.SI : Valor.NO));
+        marca.getStyleClass().addAll("marca-estado", estado);
+        marca.setAlignment(Pos.CENTER);
+        var encabezado = fila("encabezado-ejemplo", marca, texto(cumple ? "Así se cumple" : "Así no se cumple",
+                "titulo-ejemplo"));
+        var ficha = caja(8, "ficha-ejemplo", encabezado);
+        ficha.getStyleClass().add(estado);
+        if (demo != null) {
+            ficha.getChildren().add(demo.get());
+        }
+        ficha.getChildren().add(texto(descripcion, "texto-ejemplo"));
+        return ficha;
+    }
+
+    private static GridPane fichasEnColumnas(Node cumple, Node noCumple) {
+        var rejilla = new GridPane();
+        rejilla.setHgap(12);
+        rejilla.setVgap(12);
+        rejilla.widthProperty().addListener((obs, anterior, ancho) ->
+                distribuirFichas(rejilla, cumple, noCumple, ancho.doubleValue() >= ANCHO_DOS_COLUMNAS ? 2 : 1));
+        distribuirFichas(rejilla, cumple, noCumple, 1);
+        return rejilla;
+    }
+
+    private static void distribuirFichas(GridPane rejilla, Node cumple, Node noCumple, int columnas) {
+        if (rejilla.getColumnConstraints().size() == columnas) {
+            return;
+        }
+        rejilla.getChildren().clear();
+        rejilla.getColumnConstraints().clear();
+        for (int i = 0; i < columnas; i++) {
+            var columna = new ColumnConstraints();
+            columna.setPercentWidth(100.0 / columnas);
+            rejilla.getColumnConstraints().add(columna);
+        }
+        GridPane.setConstraints(cumple, 0, 0);
+        GridPane.setConstraints(noCumple, columnas == 2 ? 1 : 0, columnas == 2 ? 0 : 1);
+        rejilla.getChildren().addAll(cumple, noCumple);
     }
 
     /** Muestra la guía como panel fijo a la derecha o como plegable dentro de la tarjeta, según el ancho. */
